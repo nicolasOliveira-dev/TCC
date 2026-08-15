@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Painel de Coordenação</title>
+  <meta name="description" content="Painel de coordenação EduGrid - Gerencie professores, turmas, disciplinas e grade horária.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          Edu Grid
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" id="menuProfessores">
+          <span class="icon">🧑‍🏫</span>
+          
+          <span>Professores</span>
+        </a>
+        <a href="#" class="nav-item" id="menuTurmas">
+          <span class="icon">🎒</span>
+          <span>Turmas</span>
+        </a>
+        <a href="#" class="nav-item" id="menuDisciplinas">
+          <span class="icon">📚</span>
+          <span>Disciplinas</span>
+        </a>
+        <a href="#" class="nav-item" id="menuGerarGrade">
+          <span class="icon">✨</span>
+          <span>Gerar Grade</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="index.html" class="logout-btn">
+          <span>←</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <!-- Toggle Button (3 lines / Hamburger Menu) -->
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="user-badge" title="Coordenação">co</div>
+        </div>
+      </header>
+      <!-- Main Body Content -->
+      <main class="content-body">
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+          <div class="banner-content">
+            <div class="tagline">Bem-vindo ao EduGrid</div>
+            <h1>Painel de Coordenação</h1>
+            <p>Gerencie todos os recursos e gere sua grade em poucos cliques.</p>
+          </div>
+          <button class="banner-action-btn">
+            <span>✨</span> Gerar Grade
+          </button>
+        </section>
+        <!-- Stat Cards Row -->
+        <section class="stats-grid">
+          <!-- Card 1: Professores -->
+          <div class="stat-card dark" id="cardProfessores">
+            <div class="stat-icon-wrapper">
+              🧑‍🏫
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">3</div>
+              <div class="stat-label">Professores</div>
+            </div>
+          </div>
+          <!-- Card 2: Turmas -->
+          <div class="stat-card dark" id="cardTurmas">
+            <div class="stat-icon-wrapper">
+              🎒
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">3</div>
+              <div class="stat-label">Turmas</div>
+            </div>
+          </div>
+          <!-- Card 3: Disciplinas -->
+          <div class="stat-card bright" id="cardDisciplinas">
+            <div class="stat-icon-wrapper">
+              📚
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">4</div>
+              <div class="stat-label">Disciplinas</div>
+            </div>
+          </div>
+        </section>
+        <!-- Dashboard Split Sections -->
+        <section class="dashboard-grid">
+          <!-- Professores recentes -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2>Professores recentes</h2>
+              <a href="#" class="link-btn">Ver todos</a>
+            </div>
+            <div class="list-stack">
+              <div class="teacher-item">
+                <div class="avatar-circle">A</div>
+                <div class="teacher-info">
+                  <div class="teacher-name">Ana Oliveira</div>
+                  <div class="teacher-subject">Matemática</div>
+                </div>
+              </div>
+              <div class="teacher-item">
+                <div class="avatar-circle">C</div>
+                <div class="teacher-info">
+                  <div class="teacher-name">Carlos Mendes</div>
+                  <div class="teacher-subject">Português</div>
+                </div>
+              </div>
+              <div class="teacher-item">
+                <div class="avatar-circle">F</div>
+                <div class="teacher-info">
+                  <div class="teacher-name">Fernanda Lima</div>
+                  <div class="teacher-subject">História</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Disciplinas -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2>Disciplinas</h2>
+              <a href="#" class="link-btn">Ver todas</a>
+            </div>
+            <div class="list-stack">
+              <div class="subject-item">
+                <div class="subject-left">
+                  <span class="subject-badge mat">MAT</span>
+                  <span class="subject-name">Matemática</span>
+                </div>
+                <span class="subject-hours">5h/sem</span>
+              </div>
+              <div class="subject-item">
+                <div class="subject-left">
+                  <span class="subject-badge por">POR</span>
+                  <span class="subject-name">Língua Portuguesa</span>
+                </div>
+                <span class="subject-hours">5h/sem</span>
+              </div>
+              <div class="subject-item">
+                <div class="subject-left">
+                  <span class="subject-badge cie">CIE</span>
+                  <span class="subject-name">Ciências</span>
+                </div>
+                <span class="subject-hours">3h/sem</span>
+              </div>
+              <div class="subject-item">
+                <div class="subject-left">
+                  <span class="subject-badge his">HIS</span>
+                  <span class="subject-name">História</span>
+                </div>
+                <span class="subject-hours">3h/sem</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- Floating Help Button -->
+      <button class="help-fab" title="Ajuda">?</button>
+    </div>
+  </div>
+  <script src="js/script.js"></script>
+</body>
+</html>

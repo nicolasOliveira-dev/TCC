@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Entrar na conta</title>
+  <meta name="description" content="Acesse o painel EduGrid e gerencie suas grades horárias escolares.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="auth-page-container">
+    <div class="auth-card">
+      <!-- Logo Badge -->
+      <div class="auth-logo-badge">
+        Edu Grid
+      </div>
+      <!-- Auth Title & Subtitle -->
+      <h1 id="authTitle">Entrar na conta</h1>
+      <p class="subtitle" id="authSubtitle">Acesse o painel e gerencie suas grades horárias.</p>
+      <!-- Auth Form -->
+      <form class="auth-form" id="authForm" action="dashboard.html">
+        <div class="form-group">
+          <label for="emailInput">E-mail</label>
+          <input 
+            type="email" 
+            id="emailInput" 
+            class="form-input" 
+            placeholder="coordenacao@escola.edu" 
+            value="coordenacao@escola.edu"
+            required
+          >
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Senha</label>
+          <input 
+            type="password" 
+            id="passwordInput" 
+            class="form-input" 
+            placeholder="••••••••" 
+            value="12345678"
+            required
+          >
+        </div>
+        <button type="submit" class="auth-submit-btn" id="authSubmitBtn">
+          Entrar
+        </button>
+      </form>
+      <!-- Auth Footer Link -->
+      <div class="auth-footer" id="authFooterText">
+        Não tem conta? <a href="#" id="toggleAuthMode">Cadastre-se</a>
+      </div>
+    </div>
+  </main>
+  <script src="js/script.js"></script>
+</body>
+</html>

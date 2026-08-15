@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletar Turma - EduGrid</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+
+    <div class="form-card-container sm">
+        
+        <!-- Header sem navegação -->
+        <div class="form-card-header">
+            <div class="brand-badge">
+                <span>❖</span> EduGrid
+            </div>
+            <div class="warning-icon-wrapper">
+                ⚠️
+            </div>
+            <h1>Deletar Turma</h1>
+            <p>Informe o ID da turma que deseja remover do sistema.</p>
+        </div>
+
+        <div class="warning-box">
+            <span>Atenção: Esta ação é irreversível e removerá o cadastro da turma permanentemente.</span>
+        </div>
+
+        <!-- Formulário HTML com Thymeleaf -->
+        <form class="edugrid-form" action="/turma/deletar" th:action="@{/turma/deletar}" method="post">
+
+            <div class="form-group">
+                <label for="id">ID da Turma:</label>
+                <input
+                    class="form-input danger-focus"
+                    type="number"
+                    id="id"
+                    name="id"
+                    placeholder="Digite o ID da turma"
+                    required>
+            </div>
+
+            <!-- Botões -->
+            <div class="form-actions">
+                <a class="btn-secondary" th:href="@{/turma}" href="/turma">Cancelar</a>
+                <button class="btn-danger" type="submit">Excluir Turma</button>
+            </div>
+
+        </form>
+        
+    </div>
+
+</body>
+</html>

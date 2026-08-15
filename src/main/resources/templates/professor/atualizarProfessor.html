@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Professor - EduGrid</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+
+    <div class="form-card-container">
+        
+        <!-- Header sem navegação -->
+        <div class="form-card-header">
+            <div class="brand-badge">
+                <span>❖</span> EduGrid
+            </div>
+            <h1>Atualizar Professor</h1>
+            <p>Altere os dados necessários e confirme a atualização do cadastro.</p>
+        </div>
+
+        <!-- Formulário HTML com Thymeleaf / Action -->
+        <form class="edugrid-form" action="/professor/atualizar" th:action="@{/professor/atualizar}" method="post">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id">ID do Professor:</label>
+                    <input
+                        class="form-input"
+                        type="number"
+                        id="id"
+                        name="id"
+                        placeholder="Ex: 1"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cargaHoraria">Carga Horária (horas):</label>
+                    <input
+                        class="form-input"
+                        type="number"
+                        id="cargaHoraria"
+                        name="cargaHoraria"
+                        placeholder="Ex: 40"
+                        min="1"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite o nome completo do professor"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="areaAtuacao">Área de Atuação:</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    id="areaAtuacao"
+                    name="areaAtuacao"
+                    placeholder="Ex: Matemática, Física, História"
+                    required>
+            </div>
+
+            <!-- Botões -->
+            <div class="form-actions">
+                <a class="btn-secondary" th:href="@{/professor}" href="/professor">Cancelar</a>
+                <button class="btn-primary" type="submit">Atualizar Professor</button>
+            </div>
+
+        </form>
+        
+    </div>
+
+</body>
+</html>

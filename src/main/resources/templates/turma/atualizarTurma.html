@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Turma - EduGrid</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+
+    <div class="form-card-container">
+        
+        <!-- Header sem navegação -->
+        <div class="form-card-header">
+            <div class="brand-badge">
+                <span>❖</span> EduGrid
+            </div>
+            <h1>Atualizar Turma</h1>
+            <p>Altere os dados necessários e confirme a atualização da turma.</p>
+        </div>
+
+        <!-- Formulário HTML com Thymeleaf / Action -->
+        <form class="edugrid-form" action="/turma/atualizar" th:action="@{/turma/atualizar}" method="post">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id">ID da Turma:</label>
+                    <input
+                        class="form-input"
+                        type="number"
+                        id="id"
+                        name="id"
+                        placeholder="Ex: 1"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome">Nome da Turma:</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite o nome da turma"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="disciplina">Disciplina:</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        id="disciplina"
+                        name="disciplina"
+                        placeholder="Digite a disciplina"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="curso">Curso:</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        id="curso"
+                        name="curso"
+                        placeholder="Digite o curso"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="historicoProfessor">Histórico de Professores:</label>
+                <textarea
+                    class="form-textarea"
+                    id="historicoProfessor"
+                    name="historicoProfessor"
+                    rows="5"
+                    placeholder="Informe o histórico de professores"></textarea>
+            </div>
+
+            <!-- Botões -->
+            <div class="form-actions">
+                <a class="btn-secondary" th:href="@{/turma}" href="/turma">Cancelar</a>
+                <button class="btn-primary" type="submit">Atualizar Turma</button>
+            </div>
+
+        </form>
+        
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Gerar Grade Horária</title>
+  <meta name="description" content="Configuração e geração da grade horária no EduGrid.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <div class="app-container" id="appContainer">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          Edu Grid
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item" id="menuDashboard">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-item" id="menuProfessores">
+          <span class="icon">🧑‍🏫</span>
+          <span>Professores</span>
+        </a>
+
+        <a href="#" class="nav-item" id="menuTurmas">
+          <span class="icon">🎒</span>
+          <span>Turmas</span>
+        </a>
+
+        <a href="#" class="nav-item" id="menuDisciplinas">
+          <span class="icon">📚</span>
+          <span>Disciplinas</span>
+        </a>
+
+        <a href="#" class="nav-item active">
+          <span class="icon">✨</span>
+          <span>Gerar Grade</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="index.html" class="logout-btn">
+          <span>←</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1 class="page-title" id="pageTitleText">Gerar Grade Horária</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-badge" title="Coordenação">co</div>
+        </div>
+      </header>
+ <section id="generatedGridScreen" >
+          <!-- Page Header with Action Buttons -->
+          <div class="page-main-header">
+            <div class="title-group">
+              <span class="title-icon">🗓️</span>
+              <h2>Grade Horária Gerada</h2>
+            </div>
+            <div class="schedule-header-actions">
+              <button class="btn-reconfig" id="btnReconfig">
+                <span>←</span> Reconfigurar
+              </button>
+              <button class="btn-print" id="btnPrint">
+                <span>🖨️</span> Imprimir
+              </button>
+            </div>
+          </div>
+
+          <!-- Schedule Grid Layout -->
+          <div class="schedule-main-layout">
+            
+            <!-- Main Schedule Table Container -->
+            <div class="schedule-table-wrapper">
+              <table class="schedule-table" id="scheduleTable">
+                <thead id="scheduleThead">
+                  <!-- Generated dynamically based on days selected -->
+                </thead>
+                <tbody id="scheduleTbody">
+                  <!-- Generated dynamically based on periods selected -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Right Side Panel -->
+            <aside class="schedule-side-panel">
+              <!-- Interactive Instruction or Active Lesson Card -->
+              <div class="instruction-card" id="sideInstructionCard">
+                <div class="pointer-icon">👆</div>
+                <p>Clique em uma aula para ver os detalhes</p>
+              </div>
+
+              <!-- Legend Card -->
+              <div class="legend-card">
+                <h3>LEGENDA</h3>
+                <div class="legend-list">
+                  <div class="legend-item">
+                    <span class="legend-dot mat"></span>
+                    <span>MAT</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot por"></span>
+                    <span>POR</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot cie"></span>
+                    <span>CIE</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot his"></span>
+                    <span>HIS</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot art"></span>
+                    <span>ART</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot edf"></span>
+                    <span>EDF</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot geo"></span>
+                    <span>GEO</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot fis"></span>
+                    <span>FIS</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot qui"></span>
+                    <span>QUI</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Floating Help Button -->
+  <button class="help-fab" aria-label="Ajuda">?</button>
+  
+<script th:inline="javascript">
+
+    const tamanhoGrade = /*[[${grade.tamanhoGrade}]]*/ null;
+
+</script>
+
+  <script th:inline="javascript" src="/js/script.js"></script>
+  
+</body>
+</html>

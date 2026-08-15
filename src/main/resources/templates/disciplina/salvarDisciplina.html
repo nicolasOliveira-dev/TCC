@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Disciplina - EduGrid</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+
+    <div class="form-card-container">
+        
+        <!-- Header sem navegação -->
+        <div class="form-card-header">
+            <div class="brand-badge">
+                <span>❖</span> EduGrid
+            </div>
+            <h1>Cadastro de Disciplina</h1>
+            <p>Preencha os campos abaixo para cadastrar uma nova disciplina.</p>
+        </div>
+
+        <!-- Formulário HTML com Thymeleaf -->
+        <form class="edugrid-form" th:action="@{/disciplina/salvar}" th:object="${disciplina}" method="post">
+
+            <!-- Campo oculto para edição -->
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label for="nome">Nome da Disciplina:</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    id="nome"
+                    th:field="*{nome}"
+                    placeholder="Digite o nome da disciplina"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="cargaHoraria">Carga Horária (horas):</label>
+                <input
+                    class="form-input"
+                    type="number"
+                    id="cargaHoraria"
+                    th:field="*{cargaHoraria}"
+                    min="1"
+                    placeholder="Ex: 60"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="historicoProfessor">Histórico de Professores:</label>
+                <textarea
+                    class="form-textarea"
+                    id="historicoProfessor"
+                    th:field="*{historicoProfessor}"
+                    rows="4"
+                    placeholder="Informe o histórico de professores"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="historicoTurmas">Histórico de Turmas:</label>
+                <textarea
+                    class="form-textarea"
+                    id="historicoTurmas"
+                    th:field="*{historicoTurmas}"
+                    rows="4"
+                    placeholder="Informe o histórico de turmas"></textarea>
+            </div>
+
+            <!-- Botões -->
+            <div class="form-actions">
+                <a class="btn-secondary" th:href="@{/disciplina}">Cancelar</a>
+                <button class="btn-primary" type="submit" >Salvar Disciplina</button>
+            </div>
+
+        </form>
+        <script src="/js/script.js"></script>
+    </div>
+
+</body>
+</html>

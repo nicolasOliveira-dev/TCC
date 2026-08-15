@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Professores</title>
+  <meta name="description" content="Gerenciamento de professores cadastrados no EduGrid.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <div class="app-container" id="appContainer">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          Edu Grid
+        </div>
+      </div>
+
+       <nav class="sidebar-nav">
+        <a href="#" class="nav-item" id="menuDashboard">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item active" id="menuProfessores">
+          <span class="icon">🧑‍🏫</span>
+          <span>Professores</span>
+        </a>
+        <a href="#" class="nav-item" id="menuTurmas">
+          <span class="icon">🎒</span>
+          <span>Turmas</span>
+        </a>
+        <a href="#" class="nav-item" id="menuDisciplinas">
+          <span class="icon">📚</span>
+          <span>Disciplinas</span>
+        </a>
+        <a href="#" class="nav-item" id="menuGerarGrade">
+          <span class="icon">✨</span>
+          <span>Gerar Grade</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="index.html" class="logout-btn">
+          <span>←</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <!-- Toggle Button (3 lines / Hamburger Menu) -->
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1 class="page-title">Professores</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-badge" title="Coordenação">co</div>
+        </div>
+      </header>
+
+      <!-- Main Body Content -->
+      <main class="content-body">
+        <!-- Section Header -->
+        <div class="page-main-header">
+          <div class="title-group">
+            <span class="title-icon">🧑‍🏫</span>
+            <h2>Professores</h2>
+          </div>
+          <button class="add-btn" id="addProfessorBtn">
+            <span>+</span> Adicionar
+          </button>
+          <button class="add-btn" id="editProfessorBtn">
+            <span>✏️</span> Editar
+          </button>
+          <button class="add-btn" id="deleteProfessorBtn">
+            <span>🗑️</span> Excluir
+          </button>
+        </div>
+
+        <!-- Data Table Card -->
+        <div class="data-table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NOME</th>
+                <th>ÁREA DE ATUAÇÃO</th>
+                <th>CARGA HORÁRIA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each= "professor : ${professores}">
+                <td th:text="${professor.id}"></td>
+                <td th:text="${professor.nome}"></td>
+                <td th:text="${professor.areaAtuacao}"></td>
+                <td th:text="${professor.cargaHoraria}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      <!-- Floating Help Button -->
+      <button class="help-fab" title="Ajuda">?</button>
+    </div>
+  </div>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
