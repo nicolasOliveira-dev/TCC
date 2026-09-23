@@ -13,14 +13,16 @@ public class Disciplina {
 
     private String nome;
     private int cargaHoraria;
+    private int numPeriodos;
     private String historicoProfessor;
     private String historicoTurmas;
     
 
-    public Disciplina(Integer id, String nome, int cargaHoraria, String historicoProfessor, String historicoTurmas) {
+    public Disciplina(Integer id, String nome, int cargaHoraria, int numPeriodos, String historicoProfessor, String historicoTurmas) {
         this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
+        this.numPeriodos = numPeriodos;
         this.historicoProfessor = historicoProfessor;
         this.historicoTurmas = historicoTurmas;
     }
@@ -67,4 +69,13 @@ public class Disciplina {
     public void setHistoricoTurmas(String historicoTurmas) {
         this.historicoTurmas = historicoTurmas;
     }
+
+    public int getNumPeriodos() {
+        return numPeriodos;
+    }
+    
+    public void setNumPeriodos(TamanhoGrade tamanhoGrade) {
+        this.numPeriodos = cargaHoraria / tamanhoGrade.getTamanhoPeriodo() ;
+    }
 }
+
