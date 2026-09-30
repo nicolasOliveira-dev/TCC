@@ -1,39 +1,31 @@
 package com.example.EduGrid.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.EduGrid.model.GradeHoraria;
 import com.example.EduGrid.repository.GradeHorariaRepository;
-
+import com.example.EduGrid.model.TamanhoGrade;
+import com.example.EduGrid.repository.TamanhoGradeRepository;
 @Service
 public class GradeHorariaService {
+
     private final GradeHorariaRepository gradeHorariaRepository;
+    private final TamanhoGradeRepository tamanhoGradeRepository;
 
-    public GradeHorariaService(GradeHorariaRepository gradeHorariaRepository) {
+    public GradeHorariaService(
+            GradeHorariaRepository gradeHorariaRepository,
+            TamanhoGradeRepository tamanhoGradeRepository) {
+
         this.gradeHorariaRepository = gradeHorariaRepository;
+        this.tamanhoGradeRepository = tamanhoGradeRepository;
     }
 
-    public GradeHoraria salvarGradeHoraria(GradeHoraria gradeHoraria) {
-        return gradeHorariaRepository.save(gradeHoraria);
-    }
+    @Transactional
+    public void salvarGradeHoraria(GradeHoraria gradeHoraria) {
 
-    public GradeHoraria buscarGradeHorariaPorId(Integer id) {
-        return gradeHorariaRepository.findById(id).orElse(null);
-    }
+        tamanhoGradeRepository.save(gradeHoraria.getTamanhoGrade());
 
-    public GradeHoraria atualizarGradeHoraria(Integer id, GradeHoraria gradeHorariaAtualizada) {
-        GradeHoraria gradeHorariaExistente = gradeHorariaRepository.findById(id).orElse(null);
-        if (gradeHorariaExistente != null) {
-            gradeHorariaExistente.setQtdeTurnos(gradeHorariaAtualizada.getQtdeTurnos());
-            gradeHorariaExistente.setQtdePeriodosDia(gradeHorariaAtualizada.getQtdePeriodosDia());
-            gradeHorariaExistente.setQtdeDiasSemana(gradeHorariaAtualizada.getQtdeDiasSemana());
-            return gradeHorariaRepository.save(gradeHorariaExistente);
-        }
-        return null;
-    }
- 
-    public void excluirGradeHoraria(Integer id) {
-        gradeHorariaRepository.deleteById(id);
+        gradeHorariaRepository.save(gradeHoraria);
     }
 }
-

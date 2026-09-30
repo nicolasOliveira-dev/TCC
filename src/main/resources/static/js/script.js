@@ -218,6 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const daysTicks = document.querySelectorAll("#daysTicks .tick-item");
 
+    if (!daysRange || !periodsRange) {
+      return;
+    }
 
     // ==========================
     // ATUALIZAÇÃO DA GRADE
@@ -273,114 +276,70 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function gerarGradeVisual() {
+  const thead = document.getElementById("scheduleThead");
+  const tbody = document.getElementById("scheduleTbody");
+  const totalPeriodos = quantidadeDias * periodosPorDia;
 
-    const thead = document.getElementById("scheduleThead");
-    const tbody = document.getElementById("scheduleTbody");
+  if (!thead || !tbody || !totalPeriodos) {
+    return;
+  }
 
-    if (!thead || !tbody || !tamanhoGrade) {
-        return;
+  thead.innerHTML = "";
+  tbody.innerHTML = "";
+
+  const headerRow = document.createElement("tr");
+  const turmaHeader = document.createElement("th");
+  turmaHeader.textContent = "Turma";
+  headerRow.appendChild(turmaHeader);
+
+  for (let periodo = 0; periodo < totalPeriodos; periodo++) {
+    const th = document.createElement("th");
+    th.textContent = `Período ${periodo + 1}`;
+    headerRow.appendChild(th);
+  }
+
+  thead.appendChild(headerRow);
+
+  const matriz = Array.isArray(matrizGrade) ? matrizGrade : [];
+  const turmas = Array.isArray(turmasGrade) ? turmasGrade : [];
+  const quantidadeTurmas = Math.max(matriz.length, turmas.length);
+
+  for (let indiceTurma = 0; indiceTurma < quantidadeTurmas; indiceTurma++) {
+    const row = document.createElement("tr");
+    const turmaHeaderCell = document.createElement("th");
+    turmaHeaderCell.scope = "row";
+    turmaHeaderCell.classList.add("schedule-row-header");
+    turmaHeaderCell.textContent = turmas[indiceTurma]?.nome || `Turma ${indiceTurma + 1}`;
+    row.appendChild(turmaHeaderCell);
+
+    const linha = Array.isArray(matriz[indiceTurma]) ? matriz[indiceTurma] : [];
+
+    for (let periodo = 0; periodo < totalPeriodos; periodo++) {
+      const cell = document.createElement("td");
+      cell.classList.add("schedule-cell");
+      cell.dataset.turma = indiceTurma;
+      cell.dataset.periodo = periodo;
+
+      const aula = linha[periodo];
+      const possuiAula = aula !== null && aula !== undefined && aula !== "";
+      const conteudo = document.createElement("div");
+      const descricaoAula = typeof aula === "object" && aula !== null
+        ? aula.nome || aula.disciplina || JSON.stringify(aula)
+        : possuiAula ? String(aula) : "—";
+
+      conteudo.classList.add(possuiAula ? "lesson-content" : "empty-cell");
+      conteudo.textContent = descricaoAula;
+      cell.appendChild(conteudo);
+      row.appendChild(cell);
     }
 
-    // Quantidade de dias = número de colunas da matriz
-    const quantidadeDias = tamanhoGrade.length;
-
-    // Quantidade de períodos = número de linhas da matriz
-    const quantidadePeriodos = tamanhoGrade[0].length;
-
-
-    // ==========================================
-    // DIAS DA SEMANA
-    // ==========================================
-
-    const diasSemana = [
-        "Segunda",
-        "Terça",
-        "Quarta",
-        "Quinta",
-        "Sexta",
-        "Sábado",
-        "Domingo"
-    ];
-
-
-    // Limpa tabela
-    thead.innerHTML = "";
-    tbody.innerHTML = "";
-
-
-    // ==========================================
-    // CABEÇALHO
-    // ==========================================
-
-    const headerRow = document.createElement("tr");
-
-    // Primeira coluna
-    const periodoHeader = document.createElement("th");
-
-    periodoHeader.textContent = "Período";
-
-    headerRow.appendChild(periodoHeader);
-
-
-    // Cria as colunas dos dias
-    for (let dia = 0; dia < quantidadeDias; dia++) {
-
-        const th = document.createElement("th");
-
-        th.textContent = diasSemana[dia];
-
-        headerRow.appendChild(th);
-    }
-
-    thead.appendChild(headerRow);
-
-
-    // ==========================================
-    // CORPO DA GRADE
-    // ==========================================
-
-    for (let periodo = 0; periodo < quantidadePeriodos; periodo++) {
-
-        const row = document.createElement("tr");
-
-
-        // Número do período
-        const periodoCell = document.createElement("td");
-
-        periodoCell.textContent = `${periodo + 1}º`;
-
-        row.appendChild(periodoCell);
-
-
-        // Células dos dias
-        for (let dia = 0; dia < quantidadeDias; dia++) {
-
-            const cell = document.createElement("td");
-
-            cell.classList.add("schedule-cell");
-
-            cell.dataset.dia = dia;
-            cell.dataset.periodo = periodo;
-
-
-            // Célula inicialmente vazia
-            cell.innerHTML = `
-                <div class="empty-cell">
-                    —
-                </div>
-            `;
-
-
-            row.appendChild(cell);
-        }
-
-
-        tbody.appendChild(row);
-    }
+    tbody.appendChild(row);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-if (typeof tamanhoGrade !== "undefined" && tamanhoGrade) {
+if (typeof quantidadeDias !== "undefined" && quantidadeDias > 0 &&
+  typeof periodosPorDia !== "undefined" && periodosPorDia > 0) {
     gerarGradeVisual();
 }
 

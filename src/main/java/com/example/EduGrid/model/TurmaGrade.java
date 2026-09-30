@@ -6,12 +6,12 @@ public class TurmaGrade {
     private Integer id;
     private String nome;
     private List<Disciplina> disciplinas;
-    private String curso;
+    private Curso curso;
     private TamanhoGrade tamanhoGrade;
     private int[][] gradeHorariaMatriz;
    
 
-    public TurmaGrade(Integer id, String nome, List<Disciplina> disciplinas, String curso, TamanhoGrade tamanhoGrade) {
+    public TurmaGrade(Integer id, String nome, List<Disciplina> disciplinas, Curso curso, TamanhoGrade tamanhoGrade) {
         this.id = id;
         this.nome = nome;
         this.disciplinas = disciplinas;
@@ -48,11 +48,11 @@ public class TurmaGrade {
         this.disciplinas = disciplinas;
     }
 
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
 
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
 

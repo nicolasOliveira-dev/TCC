@@ -94,7 +94,7 @@
             
             <!-- Main Schedule Table Container -->
             <div class="schedule-table-wrapper">
-              <table class="schedule-table" id="scheduleTable">
+              <table class="schedule-table matrix-table" id="scheduleTable">
                 <thead id="scheduleThead">
                   <!-- Generated dynamically based on days selected -->
                 </thead>
@@ -168,7 +168,10 @@
   
 <script th:inline="javascript">
 
-    const tamanhoGrade = /*[[${grade.tamanhoGrade}]]*/ null;
+    const quantidadeDias = /*[[${grade.tamanhoGrade.qtdeDiasSemana}]]*/ 0;
+    const periodosPorDia = /*[[${grade.tamanhoGrade.qtdePeriodosDia}]]*/ 0;
+    const matrizGrade = /*[[${grade.matriz}]]*/ [];
+    const turmasGrade = /*[[${grade.turmas}]]*/ [];
 
 </script>
 

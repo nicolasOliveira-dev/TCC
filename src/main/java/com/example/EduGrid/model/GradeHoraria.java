@@ -5,22 +5,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import java.util.List;
+
+import jakarta.persistence.Transient;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+
 @Entity
 public class GradeHoraria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int qtdeTurnos;
-    private int qtdePeriodosDia;
-    private int qtdeDiasSemana;
+    @ManyToMany
+    private List<Turma> turmas;
 
-   
-    public GradeHoraria(int qtdeTurnos, int qtdePeriodosDia, int qtdeDiasSemana) {
-        this.qtdeTurnos = qtdeTurnos;
-        this.qtdePeriodosDia = qtdePeriodosDia;
-        this.qtdeDiasSemana = qtdeDiasSemana;
-       }
+    @ManyToOne
+    private TamanhoGrade tamanhoGrade;
+    @Transient
+    private Object[][] matriz;
+
+
+    public GradeHoraria(List<Turma> turmas, TamanhoGrade tamanhoGrade) {
+        this.turmas = turmas;
+        this.tamanhoGrade = tamanhoGrade;
+    }
+
     public GradeHoraria() {
 
     }
@@ -33,28 +43,37 @@ public class GradeHoraria {
         this.id = id;
     }
 
-    public int getQtdeTurnos() {
-        return qtdeTurnos;
+    public List<Turma> getTurmas() {
+        return turmas;
     }
 
-    public void setQtdeTurnos(int qtdeTurnos) {
-        this.qtdeTurnos = qtdeTurnos;
+    public void setTurmas(List<Turma> turmas) {
+        this.turmas = turmas;
     }
 
-    public int getQtdePeriodosDia() {
-        return qtdePeriodosDia;
+    public Object[][] getMatriz() {
+        return matriz;
     }
 
-    public void setQtdePeriodosDia(int qtdePeriodosDia) {
-        this.qtdePeriodosDia = qtdePeriodosDia;
+    public void setMatriz(Object[][] matriz) {
+        this.matriz = matriz;
     }
 
-    public int getQtdeDiasSemana() {
-        return qtdeDiasSemana;
+    public TamanhoGrade getTamanhoGrade() {
+        return tamanhoGrade;
     }
 
-    public void setQtdeDiasSemana(int qtdeDiasSemana) {
-        this.qtdeDiasSemana = qtdeDiasSemana;
+    public void setTamanhoGrade(TamanhoGrade tamanhoGrade) {
+        this.tamanhoGrade = tamanhoGrade;
+    }
+
+    public void gerarMatriz() {
+        int quantidadeTurmas = turmas == null ? 0 : turmas.size();
+        int totalPeriodos = tamanhoGrade.getQtdeDiasSemana()
+                * tamanhoGrade.getQtdePeriodosDia();
+
+        matriz = new Object[quantidadeTurmas][totalPeriodos];
+
     }
     
 }

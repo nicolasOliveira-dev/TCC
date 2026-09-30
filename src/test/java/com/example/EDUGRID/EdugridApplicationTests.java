@@ -1,4 +1,4 @@
-package com.example.EDUGRID;
+package com.example.EduGrid;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
