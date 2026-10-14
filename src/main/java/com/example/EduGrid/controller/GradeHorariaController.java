@@ -20,18 +20,15 @@ public class GradeHorariaController {
     private final GradeHorariaService gradeHorariaService;
     private final TamanhoGradeService tamanhoGradeService;
     private final TurmaService turmaService;
-    private final HorarioService horarioService;
 
     public GradeHorariaController(
             GradeHorariaService gradeHorariaService,
             TamanhoGradeService tamanhoGradeService,
-            TurmaService turmaService,
-            HorarioService horarioService) {
+            TurmaService turmaService) {
 
         this.gradeHorariaService = gradeHorariaService;
         this.tamanhoGradeService = tamanhoGradeService;
         this.turmaService = turmaService;
-        this.horarioService = horarioService;
     }
 
     @GetMapping("/gerar")

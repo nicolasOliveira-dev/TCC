@@ -75,7 +75,6 @@ public class TurmaService {
                     if (turma.getGradeHorariaMatriz()[dia][periodo] == 0 && disciplina.getId() != null) {
                         turma.getGradeHorariaMatriz()[dia][periodo] = disciplina.getId();
                         periodosAlocados++;
-                        
                     }
                 }
             }

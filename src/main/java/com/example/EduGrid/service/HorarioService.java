@@ -1,3 +1,5 @@
+package com.example.EduGrid.service;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
