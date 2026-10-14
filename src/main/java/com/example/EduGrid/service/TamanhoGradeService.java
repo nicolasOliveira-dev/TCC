@@ -21,6 +21,10 @@ public class TamanhoGradeService {
         return repository.findById(id).orElse(null);
     }
 
+    public TamanhoGrade buscarConfiguracao() {
+        return repository.findFirstByOrderByIdDesc().orElse(null);
+    }
+
     public TamanhoGrade atualizar(Integer id, TamanhoGrade atualizado) {
         TamanhoGrade existente = repository.findById(id).orElse(null);
 

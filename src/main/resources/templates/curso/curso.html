@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Cursos</title>
+  <meta name="description" content="Gerenciamento de cursos cadastrados no EduGrid.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header"><div class="brand-logo">Edu Grid</div></div>
+      <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-item" id="menuDashboard"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a href="/professor/professor" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a href="/turma/turma" class="nav-item" id="menuTurmas"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a href="/disciplina/disciplina" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a href="/curso/curso" class="nav-item active" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a href="/gradeHoraria/gerar" class="nav-item" id="menuGerarGrade"><span class="icon">✨</span><span>Gerar Grade</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="logout-btn"><span>←</span><span>Sair</span></a>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu"><span></span><span></span><span></span></button>
+          <h1 class="page-title">Cursos</h1>
+        </div>
+        <div class="topbar-right"><div class="user-badge" title="Coordenação">co</div></div>
+      </header>
+
+      <main class="content-body">
+        <div class="page-main-header">
+          <div class="title-group"><span class="title-icon">🎓</span><h2>Cursos</h2></div>
+          <a class="add-btn" th:href="@{/curso/salvar}"><span>+</span> Cadastrar curso</a>
+          <a class="btn-danger" th:href="@{/curso/deletar}">Excluir por ID</a>
+        </div>
+
+        <div class="data-table-card">
+          <table class="data-table">
+            <thead>
+              <tr><th>ID</th><th>CURSO</th><th>TIPO</th><th>TURNO</th><th>AÇÕES</th></tr>
+            </thead>
+            <tbody>
+              <tr th:each="curso : ${cursos}">
+                <td th:text="${curso.id}">1</td>
+                <td th:text="${curso.nomeCurso}">Nome do curso</td>
+                <td th:text="${curso.tipoCurso}">Tipo</td>
+                <td th:text="${curso.turno}">Turno</td>
+                <td>
+                  <a class="btn-secondary" th:href="@{/curso/atualizar(id=${curso.id})}">Atualizar</a>
+                  <form class="inline-form" th:action="@{/curso/deletar}" method="post" onsubmit="return confirm('Deseja realmente excluir este curso?');">
+                    <input type="hidden" name="id" th:value="${curso.id}">
+                    <button class="btn-danger" type="submit">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(cursos)}"><td colspan="5">Nenhum curso cadastrado.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <button class="help-fab" title="Ajuda">?</button>
+    </div>
+  </div>
+  <script src="/js/script.js"></script>
+</body>
+</html>

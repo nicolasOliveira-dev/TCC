@@ -3,8 +3,12 @@ package com.example.EduGrid.controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.EduGrid.model.Disciplina;
+import com.example.EduGrid.model.Curso;
 import com.example.EduGrid.model.Turma;
+import com.example.EduGrid.service.CursoService;
 import com.example.EduGrid.service.TurmaService;
+import com.example.EduGrid.model.TamanhoGrade;
 
 import java.util.List;
 
@@ -20,9 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/turma")
 public class TurmaController {
     private final TurmaService serviceTurma;
+    private final DisciplinaController disciplinaController;
+    private final CursoService cursoService;
     
-    public TurmaController(TurmaService serviceTurma) {
+    public TurmaController(
+            TurmaService serviceTurma,
+            DisciplinaController disciplinaController,
+            CursoService cursoService) {
         this.serviceTurma = serviceTurma;
+        this.disciplinaController = disciplinaController;
+        this.cursoService = cursoService;
     }
     
     @GetMapping("/turma")
@@ -36,6 +47,8 @@ public class TurmaController {
     @GetMapping("/salvar")
     public String getAbrirFormularioSalvar(Model model) {
         model.addAttribute("turma", new Turma());
+        model.addAttribute("disciplinas", disciplinaController.listarDisciplinas());
+        model.addAttribute("cursos", cursoService.listarCursos());
         return "turma/salvarTurma";
     }
     
@@ -48,8 +61,9 @@ public class TurmaController {
     }
 
     @GetMapping("/deletar")
-    public String abrirFormularioExclusao() {
-        return "/turma/deletarTurma";
+    public String abrirFormularioExclusao(@RequestParam(required = false) Integer id, Model model) {
+        model.addAttribute("id", id);
+        return "turma/deletarTurma";
     }
 
     @PostMapping("/deletar")
@@ -59,8 +73,19 @@ public class TurmaController {
     }
 
     @GetMapping("/atualizar")
-    public String abrirFormularioAtualizacao() {
-        return "/turma/atualizarTurma";
+    public String abrirFormularioAtualizacao(@RequestParam(required = false) Integer id, Model model) {
+        Turma turma = id == null ? new Turma() : serviceTurma.BuscarTurmaPorId(id);
+        if (turma == null) {
+            return "redirect:/turma/turma";
+        }
+
+        model.addAttribute("turma", turma);
+        List<Curso> cursos = cursoService.listarCursos();
+        model.addAttribute("cursos", cursos);
+        model.addAttribute("tamanhoGrades", turma.getTamanhoGrade() == null ? List.of() : List.of(turma.getTamanhoGrade()));
+        List<Disciplina> disciplinas = disciplinaController.listarDisciplinas();
+        model.addAttribute("disciplinas", disciplinas);
+        return "turma/atualizarTurma";
     }
     
     @PostMapping("/atualizar")
@@ -79,5 +104,4 @@ public class TurmaController {
 
         return "turma/turma";
     }
-    
 }

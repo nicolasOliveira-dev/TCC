@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excluir Curso - EduGrid</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+  <main class="form-card-container sm">
+    <header class="form-card-header">
+      <div class="brand-badge"><span>❖</span> EduGrid</div>
+      <div class="warning-icon-wrapper">⚠️</div>
+      <h1>Excluir Curso</h1>
+      <p>Informe o ID do curso que deseja remover do sistema.</p>
+    </header>
+    <div class="warning-box"><span>A exclusão é permanente e pode ser impedida se o curso estiver associado a uma turma.</span></div>
+    <form class="edugrid-form" th:action="@{/curso/deletar}" method="post">
+      <div class="form-group">
+        <label for="id">ID do curso:</label>
+        <input class="form-input danger-focus" type="number" id="id" name="id" min="1" th:value="${id}" placeholder="Digite o ID do curso" required>
+      </div>
+      <div class="form-actions">
+        <a class="btn-secondary" th:href="@{/curso/curso}">Cancelar</a>
+        <button class="btn-danger" type="submit">Excluir curso</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

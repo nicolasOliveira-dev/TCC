@@ -1,26 +1,38 @@
 package com.example.EduGrid.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
+import java.util.List;
 @Entity
 public class Turma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    private String disciplina;
-    private String curso;
-    private String historicoProfessor;
-
-    public Turma(Integer id, String nome, String disciplina, String curso, String historicoProfessor) {
+    @ManyToMany
+    private List<Disciplina> disciplinas;
+    @ManyToOne
+    private Curso curso;
+    @ManyToOne
+    private TamanhoGrade tamanhoGrade;
+    @Transient
+    private int[][] gradeHorariaMatriz;
+   
+    public Turma(Integer id, String nome, List<Disciplina> disciplinas, Curso curso, TamanhoGrade tamanhoGrade) {
         this.id = id;
         this.nome = nome;
-        this.disciplina = disciplina;
+        this.disciplinas = disciplinas;
         this.curso = curso;
-        this.historicoProfessor = historicoProfessor;
+        this.tamanhoGrade = tamanhoGrade;
+        if (tamanhoGrade != null) {
+            setGradeHorariaMatriz(tamanhoGrade);
+        }
     }
 
     public Turma() {
@@ -43,28 +55,36 @@ public class Turma {
         this.nome = nome;
     }
 
-    public String getDisciplina() {
-        return disciplina;
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
     }
 
-    public void setDisciplina(String disciplina) {
-        this.disciplina = disciplina;
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
     }
 
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
 
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
 
-    public String getHistoricoProfessor() {
-        return historicoProfessor;
+    public TamanhoGrade getTamanhoGrade() {
+        return tamanhoGrade;
     }
 
-    public void setHistoricoProfessor(String historicoProfessor) {
-        this.historicoProfessor = historicoProfessor;
+    public void setTamanhoGrade(TamanhoGrade tamanhoGrade) {
+        this.tamanhoGrade = tamanhoGrade;
+    }
+    
+    public int[][] getGradeHorariaMatriz() {
+        return gradeHorariaMatriz;
+    }
+
+    public void setGradeHorariaMatriz(TamanhoGrade tamanhoGrade) {
+        this.gradeHorariaMatriz = tamanhoGrade == null ? null : new int[tamanhoGrade.getQtdeDiasSemana()][tamanhoGrade.getQtdePeriodosDia()];
     }
 
 }

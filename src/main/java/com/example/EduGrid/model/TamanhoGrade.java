@@ -14,7 +14,7 @@ public class TamanhoGrade {
     private int qtdeTurnos;
     private int qtdePeriodosDia;
     private int qtdeDiasSemana;
-    private int tamanhoPeriodo;
+    private int tamanhoPeriodo = 45;
 
     public TamanhoGrade(int qtdeTurnos, int qtdePeriodosDia, int qtdeDiasSemana) {
         this.qtdeTurnos = qtdeTurnos;

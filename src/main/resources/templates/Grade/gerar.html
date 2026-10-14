@@ -43,7 +43,12 @@
             <span>Disciplinas</span>
           </a>
 
-          <a href="#" class="nav-item active">
+          <a href="/curso/curso" class="nav-item" id="menuCursos">
+            <span class="icon">🎓</span>
+            <span>Cursos</span>
+          </a>
+
+          <a href="/gradeHoraria/gerar" class="nav-item active" id="menuGerarGrade">
             <span class="icon">✨</span>
             <span>Gerar Grade</span>
           </a>
@@ -98,7 +103,7 @@
                   <span class="highlight-val" id="shiftsValText"></span>
                 </div>
 
-                <input type="range" id="shiftsRange" name="tamanhoGrade.qtdeTurnos" class="custom-range" min="1" max="3" value="2" />
+                <input type="range" id="shiftsRange" name="tamanhoGrade.qtdeTurnos" class="custom-range" min="1" max="3" th:value="${tamanhoGrade != null ? tamanhoGrade.qtdeTurnos : 2}" value="2" />
 
                 <div class="slider-ticks-row" id="shiftsTicks">
                   <span class="tick-item active" data-shift="1">1</span>
@@ -114,7 +119,7 @@
                   <span class="highlight-val" id="daysValText"></span>
                 </div>
 
-                <input type="range" id="daysRange" name="tamanhoGrade.qtdeDiasSemana" class="custom-range" min="1" max="7" value="5" />
+                <input type="range" id="daysRange" name="tamanhoGrade.qtdeDiasSemana" class="custom-range" min="1" max="7" th:value="${tamanhoGrade != null ? tamanhoGrade.qtdeDiasSemana : 5}" value="5" />
 
                 <div class="slider-ticks-row" id="daysTicks">
                   <span class="tick-item active" data-day="1">Seg</span>
@@ -134,7 +139,7 @@
                   <span class="highlight-val" id="periodsValText"></span>
                 </div>
 
-                <input type="range" id="periodsRange" name="tamanhoGrade.qtdePeriodosDia" class="custom-range" min="1" max="10" value="5" />
+                <input type="range" id="periodsRange" name="tamanhoGrade.qtdePeriodosDia" class="custom-range" min="1" max="10" th:value="${tamanhoGrade != null ? tamanhoGrade.qtdePeriodosDia : 5}" value="5" />
 
                 <div class="slider-ticks-row">
                   <span class="tick-item active">1</span>
@@ -145,22 +150,22 @@
               <!-- Calculated Summary Box -->
               <div class="grid-summary-box">
                 <div class="summary-col">
-                  <span class="summary-num" id="summaryShifts">2</span>
+                  <span class="summary-num" id="summaryShifts" th:text="${tamanhoGrade != null ? tamanhoGrade.qtdeTurnos : 2}">2</span>
                   <span class="summary-lbl">turnos</span>
                 </div>
 
                 <div class="summary-col">
-                  <span class="summary-num" id="summaryDays">5</span>
+                  <span class="summary-num" id="summaryDays" th:text="${tamanhoGrade != null ? tamanhoGrade.qtdeDiasSemana : 5}">5</span>
                   <span class="summary-lbl">dias/semana</span>
                 </div>
 
                 <div class="summary-col">
-                  <span class="summary-num" id="summaryPeriods">5</span>
+                  <span class="summary-num" id="summaryPeriods" th:text="${tamanhoGrade != null ? tamanhoGrade.qtdePeriodosDia : 5}">5</span>
                   <span class="summary-lbl">períodos/dia</span>
                 </div>
 
                 <div class="summary-col">
-                  <span class="summary-num" id="summaryTotal">25</span>
+                  <span class="summary-num" id="summaryTotal" th:text="${tamanhoGrade != null ? tamanhoGrade.qtdeDiasSemana * tamanhoGrade.qtdePeriodosDia : 25}">25</span>
                   <span class="summary-lbl">aulas/semana</span>
                 </div>
               </div>

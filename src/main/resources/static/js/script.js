@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       const btnText = btn.textContent.trim();
       if (btnText.includes('Gerar Grade')) {
-        showToast('✨ Gerador de Grade iniciado com sucesso!');
+        window.location.href = '/gradeHoraria/gerar';
       } else if (btnText.includes('Ver tod')) {
         showToast('Carregando lista completa...');
       } else if (btn.classList.contains('help-fab')) {
@@ -117,6 +117,12 @@ document.getElementById('menuDisciplinas')?.addEventListener('click', function (
   showToast('Navegando para Disciplinas...');
   e.preventDefault();
   window.location.href = '/disciplina/disciplina';
+});
+
+document.getElementById('menuCursos')?.addEventListener('click', function (e) {
+  showToast('Navegando para Cursos...');
+  e.preventDefault();
+  window.location.href = '/curso/curso';
 });
 
 document.getElementById('menuGerarGrade')?.addEventListener('click', function (e) {
@@ -208,15 +214,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const daysRange = document.getElementById("daysRange");
     const periodsRange = document.getElementById("periodsRange");
+    const shiftsRange = document.getElementById("shiftsRange");
 
     const daysValText = document.getElementById("daysValText");
     const periodsValText = document.getElementById("periodsValText");
+    const shiftsValText = document.getElementById("shiftsValText");
 
     const summaryDays = document.getElementById("summaryDays");
     const summaryPeriods = document.getElementById("summaryPeriods");
+    const summaryShifts = document.getElementById("summaryShifts");
     const summaryTotal = document.getElementById("summaryTotal");
 
     const daysTicks = document.querySelectorAll("#daysTicks .tick-item");
+    const shiftsTicks = document.querySelectorAll("#shiftsTicks .tick-item");
 
     if (!daysRange || !periodsRange) {
       return;
@@ -230,19 +240,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const dias = parseInt(daysRange.value);
         const periodos = parseInt(periodsRange.value);
+        const turnos = parseInt(shiftsRange.value);
 
         // Atualiza os valores próximos aos sliders
         daysValText.textContent = dias;
         periodsValText.textContent = periodos;
+        shiftsValText.textContent = turnos;
 
         // Atualiza o resumo
         summaryDays.textContent = dias;
         summaryPeriods.textContent = periodos;
+        summaryShifts.textContent = turnos;
 
         // Calcula quantidade total de aulas na semana
         const total = dias * periodos;
 
         summaryTotal.textContent = total;
+
+        shiftsTicks.forEach((tick) => {
+            const turno = parseInt(tick.dataset.shift);
+            tick.classList.toggle("active", turno <= turnos);
+        });
 
         // Atualiza os dias da semana visualmente
         daysTicks.forEach((tick) => {
@@ -265,6 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     daysRange.addEventListener("input", atualizarGrade);
     periodsRange.addEventListener("input", atualizarGrade);
+    shiftsRange.addEventListener("input", atualizarGrade);
 
 
     // ==========================

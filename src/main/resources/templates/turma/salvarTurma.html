@@ -38,37 +38,31 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="disciplina">Disciplina:</label>
-                    <input
-                        class="form-input"
-                        type="text"
-                        id="disciplina"
-                        th:field="*{disciplina}"
-                        placeholder="Digite a disciplina"
-                        required>
-                </div>
-
-                <div class="form-group">
                     <label for="curso">Curso:</label>
-                    <input
+                    <select
                         class="form-input"
-                        type="text"
                         id="curso"
                         th:field="*{curso}"
-                        placeholder="Digite o curso"
                         required>
+                        <option value="">Selecione um curso</option>
+                        <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.nomeCurso}">Engenharia de Software</option>
+                    </select>
                 </div>
+
+    
             </div>
 
-            <div class="form-group">
-                <label for="historicoProfessor">Histórico de Professores:</label>
-                <textarea
-                    class="form-textarea"
-                    id="historicoProfessor"
-                    th:field="*{historicoProfessor}"
-                    rows="4"
-                    placeholder="Informe o histórico de professores"></textarea>
-            </div>
+            <fieldset class="discipline-selector">
+                <legend>Disciplinas</legend>
+                <p class="form-help-text">Selecione as disciplinas que serão ministradas nesta turma.</p>
+                <div class="discipline-options" th:if="${!#lists.isEmpty(disciplinas)}">
+                    <label class="discipline-option" th:each="d : ${disciplinas}">
+                        <input type="checkbox" th:field="*{disciplinas}" th:value="${d.id}">
+                        <span th:text="${d.nome}">Disciplina</span>
+                    </label>
+                </div>
+                <p class="form-help-text" th:if="${#lists.isEmpty(disciplinas)}">Nenhuma disciplina cadastrada no sistema.</p>
+            </fieldset>
 
             <!-- Botões -->
             <div class="form-actions">

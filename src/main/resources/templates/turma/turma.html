@@ -19,29 +19,34 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a href="dashboard.html" class="nav-item" id="menuDashboard">
+        <a  class="nav-item" id="menuDashboard">
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           </span>
           <span>Dashboard</span>
         </a>
 
-        <a  href="#" class="nav-item" id="menuProfessores">
+        <a class="nav-item" id="menuProfessores">
           <span class="icon">🧑‍🏫</span>
           <span>Professores</span>
         </a>
 
-        <a  href="#" class="nav-item active" id="menuTurmas">
+        <a  class="nav-item active" id="menuTurmas">
           <span class="icon">🎒</span>
           <span>Turmas</span>
         </a>
 
-        <a  href="#" class="nav-item" id="menuDisciplinas">
+        <a  class="nav-item" id="menuDisciplinas">
           <span class="icon">📚</span>
           <span>Disciplinas</span>
         </a>
 
-        <a href="#" class="nav-item" id="menuGerarGrade">
+        <a href="/curso/curso" class="nav-item" id="menuCursos">
+          <span class="icon">🎓</span>
+          <span>Cursos</span>
+        </a>
+
+        <a th:href="@{/gradeHoraria/gerar}" href="/gradeHoraria/gerar" class="nav-item">
           <span class="icon">✨</span>
           <span>Gerar Grade</span>
         </a>
@@ -82,14 +87,8 @@
             <span class="title-icon">🎒</span>
             <h2>Turmas</h2>
           </div>
-          <button class="add-btn" id="addTurmaBtn">
+          <button class="add-btn">
             <span>+</span> Adicionar
-          </button>
-           <button class="add-btn" id="editTurmaBtn">
-            <span>✏️</span> Editar
-          </button>
-          <button class="add-btn" id="deleteTurmaBtn">
-            <span>🗑️</span> Excluir
           </button>
         </div>
 
@@ -98,23 +97,30 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>NOME</th>
+                <th>TURMA</th>
                 <th>CURSO</th>
-                <th>DISCIPLINA</th>
-                <th>HISTORICO DE PROFESSORES</th>
-                
+                <th>TAMANHO GRADE</th>
+                <th>DISCIPLINAS</th>
+                <th>AÇÕES</th>
               </tr>
             </thead>
             <tbody>
               <tr th:each="turma : ${turmas}">
-                <td th:text="${turma.id}"></td>
-                <td><strong th:text="${turma.nome}"></strong></td>
-                <td th:text="${turma.curso}"></td>
-                <td th:text="${turma.disciplina}"></td>
-                <td th:text="${turma.historicoProfessor}"></td>
+                <td><strong th:text="${turma.nome}">Nome da turma</strong></td>
+                <td th:text="${turma.curso != null ? turma.curso.nomeCurso : '-'}">-</td>
+                <td th:text="${turma.tamanhoGrade != null ? turma.tamanhoGrade.qtdeDiasSemana + ' dias x ' + turma.tamanhoGrade.qtdePeriodosDia + ' períodos' : '-'}">-</td>
+                <td>
+                  <span th:each="disciplina, status : ${turma.disciplinas}" th:text="${disciplina.nome + (status.last ? '' : ', ')}">Disciplina</span>
+                  <span th:if="${#lists.isEmpty(turma.disciplinas)}">-</span>
+                </td>
+                <td>
+                  <a class="btn-secondary" th:href="@{/turma/atualizar(id=${turma.id})}" href="/turma/atualizar">Atualizar</a>
+                  <a class="btn-danger" th:href="@{/turma/deletar(id=${turma.id})}" href="/turma/deletar">Deletar</a>
+                </td>
               </tr>
-             
+              <tr th:if="${#lists.isEmpty(turmas)}">
+                <td colspan="5">Nenhuma turma cadastrada.</td>
+              </tr>
             </tbody>
           </table>
         </div>

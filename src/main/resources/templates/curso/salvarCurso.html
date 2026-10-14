@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Curso - EduGrid</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+  <main class="form-card-container">
+    <header class="form-card-header">
+      <div class="brand-badge"><span>❖</span> EduGrid</div>
+      <h1>Cadastrar Curso</h1>
+      <p>Informe os dados do curso para cadastrá-lo no sistema.</p>
+    </header>
+    <form class="edugrid-form" th:action="@{/curso/salvar}" th:object="${curso}" method="post">
+      <div class="form-group">
+        <label for="nomeCurso">Nome do curso:</label>
+        <input class="form-input" type="text" id="nomeCurso" th:field="*{nomeCurso}" placeholder="Ex: Engenharia de Software" required>
+      </div>
+      <div class="form-group">
+        <label for="tipoCurso">Tipo de curso:</label>
+        <input class="form-input" type="text" id="tipoCurso" th:field="*{tipoCurso}" placeholder="Ex: Bacharelado" required>
+      </div>
+      <div class="form-group">
+        <label for="turno">Turno:</label>
+        <input class="form-input" type="text" id="turno" th:field="*{turno}" placeholder="Ex: Noturno" required>
+      </div>
+      <div class="form-actions">
+        <a class="btn-secondary" th:href="@{/curso/curso}">Cancelar</a>
+        <button class="btn-primary" type="submit">Cadastrar curso</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

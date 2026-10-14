@@ -69,4 +69,14 @@ public class DisciplinaController {
         
         return "redirect:/disciplina/disciplina";
     }
+
+    @PostMapping("/listar")
+    public String listarDisciplinas(Model model) {
+        model.addAttribute("disciplinas", listarDisciplinas());
+        return "disciplina/disciplina";
+    }
+
+    public List<Disciplina> listarDisciplinas() {
+        return disciplinaService.listarDisciplinas();
+    }
 }

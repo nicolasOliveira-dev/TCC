@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atualizar Curso - EduGrid</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="standalone-form-body">
+  <main class="form-card-container">
+    <header class="form-card-header">
+      <div class="brand-badge"><span>❖</span> EduGrid</div>
+      <h1>Atualizar Curso</h1>
+      <p>Altere os dados do curso e confirme a atualização.</p>
+    </header>
+    <form class="edugrid-form" th:action="@{/curso/atualizar}" th:object="${curso}" method="post">
+      <input type="hidden" name="id" th:value="${curso.id}">
+      <div class="form-group">
+        <label for="nomeCurso">Nome do curso:</label>
+        <input class="form-input" type="text" id="nomeCurso" th:field="*{nomeCurso}" required>
+      </div>
+      <div class="form-group">
+        <label for="tipoCurso">Tipo de curso:</label>
+        <input class="form-input" type="text" id="tipoCurso" th:field="*{tipoCurso}" required>
+      </div>
+      <div class="form-group">
+        <label for="turno">Turno:</label>
+        <input class="form-input" type="text" id="turno" th:field="*{turno}" required>
+      </div>
+      <div class="form-actions">
+        <a class="btn-secondary" th:href="@{/curso/curso}">Cancelar</a>
+        <button class="btn-primary" type="submit">Atualizar curso</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

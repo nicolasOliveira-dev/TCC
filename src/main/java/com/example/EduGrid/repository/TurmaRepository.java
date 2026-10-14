@@ -18,12 +18,4 @@ public interface TurmaRepository
             """)
     List<Object[]> turmasPorCurso();
 
-    @Query("""
-            SELECT t.historicoProfessor, COUNT(t)
-            FROM Turma t
-            GROUP BY t.historicoProfessor
-            ORDER BY COUNT(t) DESC
-            """)
-    List<Object[]> professoresComMaisTurmas();
-
 }

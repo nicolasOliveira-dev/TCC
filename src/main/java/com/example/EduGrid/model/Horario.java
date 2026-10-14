@@ -13,14 +13,20 @@ public class Horario {
     private int turno;
     private int periodoDia;
     private int diaSemana;
+
+    private String turma;
+    private String disciplina;
+    private String professor;
    
 
-    public Horario(Integer id, int turno, int periodoDia, int diaSemana) {
+    public Horario(Integer id, int turno, int periodoDia, int diaSemana, String turma, String disciplina, String professor) {
         this.id = id;
         this.turno = turno;
         this.periodoDia = periodoDia;
         this.diaSemana = diaSemana;
-        
+        this.turma = turma;
+        this.disciplina = disciplina;
+        this.professor = professor;
     }
     public Horario() {
        
@@ -56,5 +62,29 @@ public class Horario {
 
     public void setDiaSemana(int diaSemana) {
         this.diaSemana = diaSemana;
+    }
+
+    public String getTurma() {
+        return turma;
+    }
+
+    public void setTurma(String turma) {
+        this.turma = turma;
+    }
+
+    public String getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(String disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public String getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(String professor) {
+        this.professor = professor;
     }
 }

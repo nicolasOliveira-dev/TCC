@@ -41,7 +41,12 @@
           <span>Disciplinas</span>
         </a>
 
-        <a href="#" class="nav-item active">
+        <a href="/curso/curso" class="nav-item" id="menuCursos">
+          <span class="icon">🎓</span>
+          <span>Cursos</span>
+        </a>
+
+        <a href="/gradeHoraria/gerar" class="nav-item active" id="menuGerarGrade">
           <span class="icon">✨</span>
           <span>Gerar Grade</span>
         </a>
@@ -80,9 +85,9 @@
               <h2>Grade Horária Gerada</h2>
             </div>
             <div class="schedule-header-actions">
-              <button class="btn-reconfig" id="btnReconfig">
+              <a th:href="@{/gradeHoraria/configurar}" href="/gradeHoraria/configurar" class="btn-reconfig" id="btnReconfig">
                 <span>←</span> Reconfigurar
-              </button>
+              </a>
               <button class="btn-print" id="btnPrint">
                 <span>🖨️</span> Imprimir
               </button>
@@ -112,46 +117,18 @@
                 <p>Clique em uma aula para ver os detalhes</p>
               </div>
 
-              <!-- Legend Card -->
+              <!-- Disciplinas atribuídas por turma -->
               <div class="legend-card">
-                <h3>LEGENDA</h3>
-                <div class="legend-list">
-                  <div class="legend-item">
-                    <span class="legend-dot mat"></span>
-                    <span>MAT</span>
+                <h3>DISCIPLINAS POR TURMA</h3>
+                <div class="legend-list class-disciplines-list">
+                  <div class="class-disciplines-group" th:each="turma : ${grade.turmas}">
+                    <strong th:text="${turma.nome}">Nome da turma</strong>
+                    <ul th:if="${not #lists.isEmpty(turma.disciplinas)}">
+                      <li th:each="disciplina : ${turma.disciplinas}" th:text="${disciplina.nome}">Nome da disciplina</li>
+                    </ul>
+                    <p class="class-disciplines-empty" th:if="${#lists.isEmpty(turma.disciplinas)}">Nenhuma disciplina atribuída.</p>
                   </div>
-                  <div class="legend-item">
-                    <span class="legend-dot por"></span>
-                    <span>POR</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot cie"></span>
-                    <span>CIE</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot his"></span>
-                    <span>HIS</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot art"></span>
-                    <span>ART</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot edf"></span>
-                    <span>EDF</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot geo"></span>
-                    <span>GEO</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot fis"></span>
-                    <span>FIS</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot qui"></span>
-                    <span>QUI</span>
-                  </div>
+                  <p class="class-disciplines-empty" th:if="${#lists.isEmpty(grade.turmas)}">Nenhuma turma cadastrada.</p>
                 </div>
               </div>
             </aside>

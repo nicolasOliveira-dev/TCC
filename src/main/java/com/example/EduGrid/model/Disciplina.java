@@ -10,15 +10,14 @@ public class Disciplina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String nome;
-    private int cargaHoraria;
+    private double cargaHoraria;
     private int numPeriodos;
     private String historicoProfessor;
     private String historicoTurmas;
     
 
-    public Disciplina(Integer id, String nome, int cargaHoraria, int numPeriodos, String historicoProfessor, String historicoTurmas) {
+    public Disciplina(Integer id, String nome, double cargaHoraria, int numPeriodos, String historicoProfessor, String historicoTurmas) {
         this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
@@ -46,11 +45,11 @@ public class Disciplina {
         this.nome = nome;
     }
 
-    public int getCargaHoraria() {
+    public double getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(int cargaHoraria) {
+    public void setCargaHoraria(double cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
 
@@ -73,9 +72,13 @@ public class Disciplina {
     public int getNumPeriodos() {
         return numPeriodos;
     }
+
+    public double converterHoraParaMinutos(double cargaHoraria) {
+        return cargaHoraria * 60;
+    }
     
     public void setNumPeriodos(TamanhoGrade tamanhoGrade) {
-        this.numPeriodos = cargaHoraria / tamanhoGrade.getTamanhoPeriodo() ;
+        double cargaHorariaMinutos = converterHoraParaMinutos(cargaHoraria);
+        this.numPeriodos = (int) Math.ceil(cargaHorariaMinutos / tamanhoGrade.getTamanhoPeriodo());
     }
 }
-
