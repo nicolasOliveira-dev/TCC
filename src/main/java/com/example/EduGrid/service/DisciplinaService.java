@@ -16,9 +16,10 @@ public class DisciplinaService {
     }
 
     public Disciplina salvarDisciplina(Disciplina disciplina) {
+        disciplina.recalcularNumPeriodos();
         return disciplinaRepository.save(disciplina);
     }
-    
+
     public List<Disciplina> listarDisciplinas() {
         return disciplinaRepository.findAll();
 
@@ -32,9 +33,18 @@ public class DisciplinaService {
         Disciplina disciplinaExistente = disciplinaRepository.findById(id).orElse(null);
         if (disciplinaExistente != null) {
             disciplinaExistente.setNome(disciplinaAtualizada.getNome());
-            disciplinaExistente.setHistoricoProfessor(disciplinaAtualizada.getHistoricoProfessor());
-            disciplinaExistente.setHistoricoTurmas(disciplinaAtualizada.getHistoricoTurmas());
+            disciplinaExistente.setAreaAtuacao(disciplinaAtualizada.getAreaAtuacao());
             disciplinaExistente.setCargaHoraria(disciplinaAtualizada.getCargaHoraria());
+            if (disciplinaAtualizada.getTamanhoGrade() != null) {
+                disciplinaExistente.setTamanhoGrade(disciplinaAtualizada.getTamanhoGrade());
+            }
+            if (disciplinaAtualizada.getCurso() != null) {
+                disciplinaExistente.setCurso(disciplinaAtualizada.getCurso());
+            }
+            disciplinaExistente.setTipoDisciplina(disciplinaAtualizada.getTipoDisciplina());
+            disciplinaExistente.setMinPeriodosJuntos(disciplinaAtualizada.getMinPeriodosJuntos());
+            disciplinaExistente.setMaxPeriodosJuntos(disciplinaAtualizada.getMaxPeriodosJuntos());
+
             return disciplinaRepository.save(disciplinaExistente);
         }
         return null;
@@ -44,20 +54,4 @@ public class DisciplinaService {
         disciplinaRepository.deleteById(id);
     }
 
-    public List<Disciplina> disciplinasAcimaDaMedia() {
-        return disciplinaRepository.disciplinasAcimaDaMedia();
-    }
-
-    public Integer calcularCargaHorariaTotal() {
-        return disciplinaRepository.calcularCargaHorariaTotal();
-    }
-
-    public List<Object[]> disciplinasPorProfessor() {
-        return disciplinaRepository.disciplinasPorProfessor();
-    }
-
-    public List<Disciplina> disciplinaComMaiorCargaHoraria() {
-        return disciplinaRepository.disciplinaComMaiorCargaHoraria();
-    }
-    
 }

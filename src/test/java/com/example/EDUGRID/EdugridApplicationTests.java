@@ -1,15 +1,13 @@
 package com.example.EduGrid;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-
-@SpringBootTest
+@Disabled("Este teste requer o MySQL local configurado em application.properties.")
+@SpringBootTest(properties = {
+        "edugrid.dados.adequar-na-inicializacao=false"
+})
 class EdugridApplicationTests {
 
 	@Test

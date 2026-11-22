@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="|EduGrid - ${titulo}|">EduGrid - Grade semanal</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    .grade-scroll { overflow-x: auto; margin-top: 20px; }
+    .grade-semanal { width: 100%; min-width: 760px; border-collapse: collapse; }
+    .grade-semanal th, .grade-semanal td { border: 1px solid var(--border-color); padding: 11px; text-align: center; }
+    .grade-semanal th { background: var(--primary-dark); color: #fff; }
+    .grade-semanal td { white-space: pre-line; min-width: 105px; }
+    .grade-turno { margin-top: 24px; }
+    .print-heading { display: none; }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+   <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          Edu Grid
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a th:href="@{/dashboard}" class="nav-item active" id="menuDashboard" aria-current="page"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a th:href="@{/professor/professor}" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a th:href="@{/turma/turma}" class="nav-item" id="menuTurmas"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a th:href="@{/disciplina/disciplina}" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a th:href="@{/curso/curso}" class="nav-item" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a th:href="@{/gradeHoraria/gerar}" class="nav-item" id="menuGerarGrade"><span class="icon">✨</span><span>Gerar Grade</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <a th:href="@{/sair}" class="logout-btn">
+          <span>←</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+  <div class="main-wrapper">
+    <header class="topbar"><div class="topbar-left">
+      <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu"><span></span><span></span><span></span></button>
+      <h1 class="page-title" th:text="${titulo}">Grade semanal</h1>
+    </div></header>
+    <main class="content-body">
+      <section class="panel-card">
+        <div class="print-heading">
+          <h1>EduGrid - <span th:text="${titulo}">Grade semanal</span></h1>
+          <p th:text="${nomeSelecionado}">Selecionado</p>
+        </div>
+        <div class="page-main-header weekly-page-heading">
+          <div class="title-group"><h2 class="weekly-screen-heading" th:text="${nomeSelecionado}">Selecionado</h2></div>
+          <div class="weekly-grade-actions" th:if="${temHorarios}">
+            <button class="btn-print" type="button" id="btnPrintHorario">Imprimir grade / Salvar PDF</button>
+          </div>
+        </div>
+        <p th:if="${!temHorarios}" role="status">Ainda não há horários gerados para este cadastro.</p>
+        <div th:if="${temHorarios}" th:each="turno, turnoStat : ${gradeSemanal.turnos}" class="grade-turno">
+          <h3 th:text="${turno}">Turno</h3>
+          <div class="grade-scroll">
+            <table class="grade-semanal">
+              <thead><tr><th>Período</th><th th:each="dia : ${gradeSemanal.dias}" th:text="${dia}">Dia</th></tr></thead>
+              <tbody>
+                <tr th:each="periodo : ${gradeSemanal.periodos}">
+                  <th scope="row" th:text="|Período ${periodo}|">Período</th>
+                  <td th:each="dia, diaStat : ${gradeSemanal.dias}"
+                      th:text="${gradeSemanal.celulas[turnoStat.index][periodo - 1][diaStat.index]}">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="weekly-screen-actions" style="margin-top:24px"><a class="link-btn" th:href="@{/dashboard}">Voltar ao dashboard</a></div>
+      </section>
+    </main>
+  </div>
+</div>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

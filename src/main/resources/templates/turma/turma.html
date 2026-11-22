@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduGrid - Turmas</title>
   <meta name="description" content="Gerenciamento de turmas cadastradas no EduGrid.">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
   <div class="app-container" id="appContainer">
-    <!-- Sidebar Navigation -->
+
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand-logo">
@@ -19,53 +19,27 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a  class="nav-item" id="menuDashboard">
-          <span class="icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          </span>
-          <span>Dashboard</span>
-        </a>
-
-        <a class="nav-item" id="menuProfessores">
-          <span class="icon">🧑‍🏫</span>
-          <span>Professores</span>
-        </a>
-
-        <a  class="nav-item active" id="menuTurmas">
-          <span class="icon">🎒</span>
-          <span>Turmas</span>
-        </a>
-
-        <a  class="nav-item" id="menuDisciplinas">
-          <span class="icon">📚</span>
-          <span>Disciplinas</span>
-        </a>
-
-        <a href="/curso/curso" class="nav-item" id="menuCursos">
-          <span class="icon">🎓</span>
-          <span>Cursos</span>
-        </a>
-
-        <a th:href="@{/gradeHoraria/gerar}" href="/gradeHoraria/gerar" class="nav-item">
-          <span class="icon">✨</span>
-          <span>Gerar Grade</span>
-        </a>
+        <a th:href="@{/dashboard}" class="nav-item" id="menuDashboard"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a th:href="@{/professor/professor}" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a th:href="@{/turma/turma}" class="nav-item active" id="menuTurmas" aria-current="page"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a th:href="@{/disciplina/disciplina}" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a th:href="@{/curso/curso}" class="nav-item" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a th:href="@{/gradeHoraria/gerar}" class="nav-item" id="menuGerarGrade"><span class="icon">✨</span><span>Gerar Grade</span></a>
       </nav>
 
       <div class="sidebar-footer">
-        <a href="index.html" class="logout-btn">
+        <a th:href="@{/sair}" class="logout-btn">
           <span>←</span>
           <span>Sair</span>
         </a>
       </div>
     </aside>
 
-    <!-- Main Wrapper -->
     <div class="main-wrapper">
-      <!-- Topbar Header -->
+
       <header class="topbar">
         <div class="topbar-left">
-          <!-- Toggle Button (3 lines / Hamburger Menu) -->
+
           <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
             <span></span>
             <span></span>
@@ -75,24 +49,22 @@
         </div>
 
         <div class="topbar-right">
-          <div class="user-badge" title="Coordenação">co</div>
+          <div class="user-badge" th:title="${nomeUsuario}" th:text="${iniciaisUsuario}">EG</div>
         </div>
       </header>
 
-      <!-- Main Body Content -->
       <main class="content-body">
-        <!-- Section Header -->
+
         <div class="page-main-header">
           <div class="title-group">
             <span class="title-icon">🎒</span>
             <h2>Turmas</h2>
           </div>
-          <button class="add-btn">
-            <span>+</span> Adicionar
+          <button class="add-btn" id="addTurmaBtn" >
+            <span>+</span> Adicionar turma
           </button>
         </div>
 
-        <!-- Data Table Card -->
         <div class="data-table-card">
           <table class="data-table">
             <thead>
@@ -114,8 +86,13 @@
                   <span th:if="${#lists.isEmpty(turma.disciplinas)}">-</span>
                 </td>
                 <td>
-                  <a class="btn-secondary" th:href="@{/turma/atualizar(id=${turma.id})}" href="/turma/atualizar">Atualizar</a>
-                  <a class="btn-danger" th:href="@{/turma/deletar(id=${turma.id})}" href="/turma/deletar">Deletar</a>
+                  <div class="table-actions">
+                    <a class="btn-secondary" th:href="@{/turma/atualizar(id=${turma.id})}">Atualizar</a>
+                    <form class="inline-form" th:action="@{/turma/deletar}" method="post" onsubmit="return confirm('Deseja realmente excluir esta turma?');">
+                      <input type="hidden" name="id" th:value="${turma.id}">
+                      <button class="btn-danger" type="submit">Excluir</button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               <tr th:if="${#lists.isEmpty(turmas)}">
@@ -126,11 +103,10 @@
         </div>
       </main>
 
-      <!-- Floating Help Button -->
       <button class="help-fab" title="Ajuda">?</button>
     </div>
   </div>
 
-  <script src="/js/script.js"></script>
+  <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

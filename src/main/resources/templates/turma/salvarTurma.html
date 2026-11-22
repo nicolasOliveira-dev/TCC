@@ -1,78 +1,82 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Turma - EduGrid</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Turma - EduGrid</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="standalone-form-body">
 
-    <div class="form-card-container">
-        
-        <!-- Header sem navegação -->
-        <div class="form-card-header">
-            <div class="brand-badge">
-                <span>❖</span> EduGrid
-            </div>
-            <h1>Cadastro de Turma</h1>
-            <p>Preencha os dados abaixo para cadastrar uma nova turma.</p>
-        </div>
+  <div class="form-card-container">
 
-        <!-- Formulário HTML com Thymeleaf -->
-        <form class="edugrid-form" th:action="@{/turma/salvar}" th:object="${turma}" method="post">
-
-            <!-- Campo oculto para edição -->
-            <input type="hidden" th:field="*{id}">
-
-            <div class="form-group">
-                <label for="nome">Nome da Turma:</label>
-                <input
-                    class="form-input"
-                    type="text"
-                    id="nome"
-                    th:field="*{nome}"
-                    placeholder="Digite o nome da turma (ex: 3º Ano A)"
-                    required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="curso">Curso:</label>
-                    <select
-                        class="form-input"
-                        id="curso"
-                        th:field="*{curso}"
-                        required>
-                        <option value="">Selecione um curso</option>
-                        <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.nomeCurso}">Engenharia de Software</option>
-                    </select>
-                </div>
-
-    
-            </div>
-
-            <fieldset class="discipline-selector">
-                <legend>Disciplinas</legend>
-                <p class="form-help-text">Selecione as disciplinas que serão ministradas nesta turma.</p>
-                <div class="discipline-options" th:if="${!#lists.isEmpty(disciplinas)}">
-                    <label class="discipline-option" th:each="d : ${disciplinas}">
-                        <input type="checkbox" th:field="*{disciplinas}" th:value="${d.id}">
-                        <span th:text="${d.nome}">Disciplina</span>
-                    </label>
-                </div>
-                <p class="form-help-text" th:if="${#lists.isEmpty(disciplinas)}">Nenhuma disciplina cadastrada no sistema.</p>
-            </fieldset>
-
-            <!-- Botões -->
-            <div class="form-actions">
-                <a class="btn-secondary" th:href="@{/turma}">Cancelar</a>
-                <button class="btn-primary" type="submit">Salvar Turma</button>
-            </div>
-
-        </form>
-        
+    <div class="form-card-header">
+      <div class="brand-badge">
+        <span>❖</span> EduGrid
+      </div>
+      <h1>Cadastro de Turma</h1>
+      <p>Preencha os dados abaixo para cadastrar uma nova turma.</p>
     </div>
+
+    <form class="edugrid-form" th:action="@{/turma/salvar}" th:object="${turma}" method="post">
+
+      <input type="hidden" th:field="*{id}">
+
+      <div class="form-group">
+        <label for="nome">Nome da Turma:</label>
+        <input
+          class="form-input"
+          type="text"
+          id="nome"
+          th:field="*{nome}"
+          placeholder="Digite o nome da turma (ex: 3º Ano A)"
+          required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="curso">Curso:</label>
+          <select
+            class="form-input"
+            id="curso"
+            th:field="*{curso}"
+            required>
+            <option value="">Selecione um curso</option>
+            <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.nomeCurso}">Engenharia de Software</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="ano">Ano:</label>
+          <input
+            class="form-input"
+            type="number"
+            id="ano"
+            th:field="*{ano}"
+            step="1"
+            required>
+        </div>
+      </div>
+
+      <fieldset class="discipline-selector">
+        <legend>Disciplinas</legend>
+        <p class="form-help-text">Selecione as disciplinas que serão ministradas nesta turma.</p>
+        <div class="discipline-options" th:if="${!#lists.isEmpty(disciplinas)}">
+          <label class="discipline-option" th:each="d : ${disciplinas}">
+            <input type="checkbox" th:field="*{disciplinas}" th:value="${d.id}">
+            <span th:text="${d.nome}">Disciplina</span>
+          </label>
+        </div>
+        <p class="form-help-text" th:if="${#lists.isEmpty(disciplinas)}">Nenhuma disciplina cadastrada no sistema.</p>
+      </fieldset>
+
+      <div class="form-actions">
+  <a class="btn-secondary" th:href="@{/turma/turma}">Cancelar</a>
+        <button class="btn-primary" type="submit">Salvar Turma</button>
+      </div>
+
+    </form>
+
+  </div>
 
 </body>
 </html>

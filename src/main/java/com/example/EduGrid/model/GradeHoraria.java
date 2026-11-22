@@ -5,17 +5,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.persistence.Transient;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Column;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
 public class GradeHoraria {
+    private static final DateTimeFormatter FORMATO_DATA_GERACAO
+            = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,9 +32,17 @@ public class GradeHoraria {
 
     @ManyToOne
     private TamanhoGrade tamanhoGrade;
+
+    private LocalDateTime dataGeracao;
+
+    @Column(columnDefinition = "TEXT")
+    private String relatorioRestricoesHard;
+
+    @Column(columnDefinition = "TEXT")
+    private String relatorioEdicao;
+
     @Transient
     private Object[][] matriz;
-
 
     public GradeHoraria(List<Turma> turmas, TamanhoGrade tamanhoGrade) {
         this.turmas = turmas;
@@ -70,6 +85,41 @@ public class GradeHoraria {
         this.tamanhoGrade = tamanhoGrade;
     }
 
+    public LocalDateTime getDataGeracao() {
+        return dataGeracao;
+    }
+
+    public void setDataGeracao(LocalDateTime dataGeracao) {
+        this.dataGeracao = dataGeracao;
+    }
+
+    public String getRelatorioRestricoesHard() {
+        return relatorioRestricoesHard;
+    }
+
+    public void setRelatorioRestricoesHard(String relatorioRestricoesHard) {
+        this.relatorioRestricoesHard = relatorioRestricoesHard;
+    }
+
+    public String getRelatorioEdicao() {
+        return relatorioEdicao;
+    }
+
+    public void setRelatorioEdicao(String relatorioEdicao) {
+        this.relatorioEdicao = relatorioEdicao;
+    }
+
+    public String getDataGeracaoFormatada() {
+        return dataGeracao == null ? "" : dataGeracao.format(FORMATO_DATA_GERACAO);
+    }
+
+    @PrePersist
+    private void registrarDataGeracao() {
+        if (dataGeracao == null) {
+            dataGeracao = LocalDateTime.now();
+        }
+    }
+
     public void gerarMatriz() {
         int quantidadeTurmas = turmas == null ? 0 : turmas.size();
         int quantidadeDias = tamanhoGrade.getQtdeDiasSemana();
@@ -105,5 +155,5 @@ public class GradeHoraria {
             }
         }
     }
-    
+
 }

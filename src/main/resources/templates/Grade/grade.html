@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduGrid - Gerar Grade Horária</title>
   <meta name="description" content="Configuração e geração da grade horária no EduGrid.">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
   <div class="app-container" id="appContainer">
-    <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand-logo">
@@ -19,50 +18,22 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a href="#" class="nav-item" id="menuDashboard">
-          <span class="icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          </span>
-          <span>Dashboard</span>
-        </a>
-
-        <a href="#" class="nav-item" id="menuProfessores">
-          <span class="icon">🧑‍🏫</span>
-          <span>Professores</span>
-        </a>
-
-        <a href="#" class="nav-item" id="menuTurmas">
-          <span class="icon">🎒</span>
-          <span>Turmas</span>
-        </a>
-
-        <a href="#" class="nav-item" id="menuDisciplinas">
-          <span class="icon">📚</span>
-          <span>Disciplinas</span>
-        </a>
-
-        <a href="/curso/curso" class="nav-item" id="menuCursos">
-          <span class="icon">🎓</span>
-          <span>Cursos</span>
-        </a>
-
-        <a href="/gradeHoraria/gerar" class="nav-item active" id="menuGerarGrade">
-          <span class="icon">✨</span>
-          <span>Gerar Grade</span>
-        </a>
+        <a th:href="@{/dashboard}" class="nav-item" id="menuDashboard"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a th:href="@{/professor/professor}" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a th:href="@{/turma/turma}" class="nav-item" id="menuTurmas"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a th:href="@{/disciplina/disciplina}" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a th:href="@{/curso/curso}" class="nav-item" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a th:href="@{/gradeHoraria/gerar}" class="nav-item active" id="menuGerarGrade" aria-current="page"><span class="icon">✨</span><span>Gerar Grade</span></a>
       </nav>
 
       <div class="sidebar-footer">
-        <a href="index.html" class="logout-btn">
+        <a th:href="@{/sair}" class="logout-btn">
           <span>←</span>
           <span>Sair</span>
         </a>
       </div>
     </aside>
-
-    <!-- Main Wrapper -->
     <div class="main-wrapper">
-      <!-- Topbar Header -->
       <header class="topbar">
         <div class="topbar-left">
           <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
@@ -74,17 +45,25 @@
         </div>
 
         <div class="topbar-right">
-          <div class="user-badge" title="Coordenação">co</div>
+          <div class="user-badge" th:title="${nomeUsuario}" th:text="${iniciaisUsuario}">EG</div>
         </div>
       </header>
  <section id="generatedGridScreen" >
-          <!-- Page Header with Action Buttons -->
           <div class="page-main-header">
             <div class="title-group">
               <span class="title-icon">🗓️</span>
-              <h2>Grade Horária Gerada</h2>
+              <h2 th:text="|Grade Horária #${grade.id}|">Grade Horária Gerada</h2>
             </div>
             <div class="schedule-header-actions">
+              <form th:action="@{/gradeHoraria/grade/{id}/nova-versao(id=${grade.id})}" method="post" class="nova-versao-form">
+                <label title="Mantém fixos os blocos movidos manualmente nesta grade">
+                  <input type="checkbox" name="preservarEdicoesManuais" value="true">
+                  Fixar edições manuais
+                </label>
+                <button class="btn-reconfig" type="submit">Gerar nova versão</button>
+              </form>
+              <button class="btn-reconfig" type="button" id="btnEditSchedule">Editar grade</button>
+              <button class="btn-reconfig" type="button" id="btnUndoEdit" hidden>Desfazer última alteração</button>
               <a th:href="@{/gradeHoraria/configurar}" href="/gradeHoraria/configurar" class="btn-reconfig" id="btnReconfig">
                 <span>←</span> Reconfigurar
               </a>
@@ -93,66 +72,51 @@
               </button>
             </div>
           </div>
-
-          <!-- Schedule Grid Layout -->
           <div class="schedule-main-layout">
-            
-            <!-- Main Schedule Table Container -->
-            <div class="schedule-table-wrapper">
-              <table class="schedule-table matrix-table" id="scheduleTable">
-                <thead id="scheduleThead">
-                  <!-- Generated dynamically based on days selected -->
-                </thead>
-                <tbody id="scheduleTbody">
-                  <!-- Generated dynamically based on periods selected -->
-                </tbody>
-              </table>
+            <div class="schedule-shifts" id="scheduleTablesContainer"></div>
+
+            <div class="instruction-card schedule-edit-instructions" id="sideInstructionCard">
+              <div class="pointer-icon" aria-hidden="true">✏️</div>
+              <p>Ative “Editar grade” para mover ou trocar blocos. As violações encontradas serão listadas abaixo.</p>
+              <div class="edit-preview" id="editPreview" role="status" aria-live="polite"></div>
             </div>
-
-            <!-- Right Side Panel -->
-            <aside class="schedule-side-panel">
-              <!-- Interactive Instruction or Active Lesson Card -->
-              <div class="instruction-card" id="sideInstructionCard">
-                <div class="pointer-icon">👆</div>
-                <p>Clique em uma aula para ver os detalhes</p>
-              </div>
-
-              <!-- Disciplinas atribuídas por turma -->
-              <div class="legend-card">
-                <h3>DISCIPLINAS POR TURMA</h3>
-                <div class="legend-list class-disciplines-list">
-                  <div class="class-disciplines-group" th:each="turma : ${grade.turmas}">
-                    <strong th:text="${turma.nome}">Nome da turma</strong>
-                    <ul th:if="${not #lists.isEmpty(turma.disciplinas)}">
-                      <li th:each="disciplina : ${turma.disciplinas}" th:text="${disciplina.nome}">Nome da disciplina</li>
-                    </ul>
-                    <p class="class-disciplines-empty" th:if="${#lists.isEmpty(turma.disciplinas)}">Nenhuma disciplina atribuída.</p>
-                  </div>
-                  <p class="class-disciplines-empty" th:if="${#lists.isEmpty(grade.turmas)}">Nenhuma turma cadastrada.</p>
-                </div>
-              </div>
-            </aside>
 
           </div>
         </section>
 
+        <section class="panel-card hard-violations-report"
+                 th:if="${relatorioRestricoesHard != null and !#strings.isEmpty(relatorioRestricoesHard)}"
+                 role="alert" aria-labelledby="hardViolationsTitle">
+          <h2 id="hardViolationsTitle">Restrições obrigatórias não atendidas</h2>
+          <p>A grade foi gerada e pode ser consultada, mas estes conflitos precisam ser revisados:</p>
+          <pre th:text="${relatorioRestricoesHard}">Relatório de restrições hard</pre>
+        </section>
+
+        <section class="panel-card edit-violations-report"
+                 th:if="${relatorioEdicao != null and !#strings.isEmpty(relatorioEdicao)}"
+                 role="status" aria-labelledby="editViolationsTitle">
+          <h2 id="editViolationsTitle">Restrições identificadas após a edição</h2>
+          <pre th:text="${relatorioEdicao}">Relatório da edição manual</pre>
+        </section>
       </main>
     </div>
   </div>
-
-  <!-- Floating Help Button -->
   <button class="help-fab" aria-label="Ajuda">?</button>
   
 <script th:inline="javascript">
 
     const quantidadeDias = /*[[${grade.tamanhoGrade.qtdeDiasSemana}]]*/ 0;
     const periodosPorDia = /*[[${grade.tamanhoGrade.qtdePeriodosDia}]]*/ 0;
+    const quantidadeTurnos = /*[[${grade.tamanhoGrade.qtdeTurnos}]]*/ 0;
     const matrizGrade = /*[[${grade.matriz}]]*/ [];
     const turmasGrade = /*[[${grade.turmas}]]*/ [];
+    const turnosTurmas = /*[[${turnosTurmas}]]*/ [];
+    const horariosGrade = /*[[${horariosGrade}]]*/ [];
+    const gradeId = /*[[${grade.id}]]*/ 0;
 
 </script>
 
-  <script th:inline="javascript" src="/js/script.js"></script>
+  <script th:inline="javascript" th:src="@{/js/script.js}"></script>
   
 </body>
 </html>

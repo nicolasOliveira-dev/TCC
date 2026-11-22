@@ -1,70 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Professor - EduGrid</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Professor - EduGrid</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="standalone-form-body">
+  <main class="form-card-container professor-form-card">
+    <header class="form-card-header">
+      <div class="brand-badge"><span>❖</span> EduGrid</div>
+      <h1>Cadastro de Professor</h1>
+      <p>Preencha os dados abaixo para cadastrar um novo professor.</p>
+    </header>
 
-    <div class="form-card-container">
-        
-        <!-- Header sem navegação -->
-        <div class="form-card-header">
-            <div class="brand-badge">
-                <span>❖</span> EduGrid
-            </div>
-            <h1>Cadastro de Professor</h1>
-            <p>Preencha os dados abaixo para cadastrar um novo professor.</p>
+    <form class="edugrid-form" th:action="@{/professor/salvar}" th:object="${professor}" method="post">
+      <div class="form-group">
+        <label for="nome">Nome Completo:</label>
+        <input class="form-input" type="text" id="nome" th:field="*{nome}"
+           placeholder="Digite o nome completo do professor" required>
+      </div>
+
+      <div class="form-group">
+        <label for="areaAtuacao">Área de Atuação:</label>
+        <input class="form-input" type="text" id="areaAtuacao" th:field="*{areaAtuacao}"
+           placeholder="Ex: Matemática, Física, História" required>
+      </div>
+
+      <fieldset class="discipline-selector">
+        <legend>Disciplinas que pode lecionar</legend>
+        <p class="form-help-text">As opções são filtradas pela área de atuação informada.</p>
+        <div class="discipline-options">
+          <label class="weekday-option discipline-option" th:each="disciplina : ${disciplinas}"
+             th:attr="data-disciplina-area=${disciplina.areaAtuacao}">
+            <input type="checkbox" name="disciplinasSelecionadas" th:value="${disciplina.id}">
+            <span th:text="${disciplina.nome}">Disciplina</span>
+          </label>
         </div>
+        <p class="form-help-text" data-disciplinas-empty hidden>
+          Nenhuma disciplina cadastrada para esta área de atuação.
+        </p>
+      </fieldset>
 
-        <!-- Formulário HTML com suporte a Thymeleaf e Action Padrão -->
-        <form class="edugrid-form" action="/professor/salvar" th:action="@{/professor/salvar}" method="post">
+      <div class="form-group">
+        <label for="cargaHoraria">Carga Horária Semanal (horas):</label>
+        <input class="form-input" type="number" id="cargaHoraria" th:field="*{cargaHoraria}"
+           min="1" placeholder="Ex: 40" required>
+      </div>
 
-            <div class="form-group">
-                <label for="nome">Nome Completo:</label>
-                <input
-                    class="form-input"
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    placeholder="Digite o nome completo do professor"
-                    required>
-            </div>
+      <fieldset class="weekday-selector">
+        <legend>Dia de planejamento desejado</legend>
+        <p class="form-help-text">Selecione os dias da semana desejados para planejamento:</p>
+        <div class="weekday-options">
+          <label class="weekday-option" th:each="dia : ${diasSemana}">
+            <input type="checkbox" th:field="*{intencaoDiaPlanejamento}" th:value="${dia}">
+            <span th:text="${dia}">Segunda-feira</span>
+          </label>
+        </div>
+      </fieldset>
 
-            <div class="form-group">
-                <label for="areaAtuacao">Área de Atuação:</label>
-                <input
-                    class="form-input"
-                    type="text"
-                    id="areaAtuacao"
-                    name="areaAtuacao"
-                    placeholder="Ex: Matemática, Física, História"
-                    required>
-            </div>
+      <fieldset class="availability-selector">
+        <legend>Disponibilidade horária</legend>
+        <p class="form-help-text">Os horários começam disponíveis. Marque os períodos em que o professor não pode dar aula.</p>
 
-            <div class="form-group">
-                <label for="cargaHoraria">Carga Horária Semanal (horas):</label>
-                <input
-                    class="form-input"
-                    type="number"
-                    id="cargaHoraria"
-                    name="cargaHoraria"
-                    min="1"
-                    placeholder="Ex: 40"
-                    required>
-            </div>
+        <section class="availability-shift" th:each="turno : ${#numbers.sequence(0, nomesTurnos.size() - 1)}">
+          <h2 th:text="${nomesTurnos[turno]}">Turno</h2>
+          <div class="availability-table-wrapper">
+            <table class="availability-table">
+              <thead>
+                <tr>
+                  <th scope="col">Período</th>
+                  <th scope="col" th:each="dia : ${diasSemana}" th:text="${dia}">Dia</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="periodo : ${#numbers.sequence(0, quantidadePeriodos - 1)}">
+                  <th scope="row" th:text="${'Período ' + (periodo + 1)}">Período 1</th>
+                  <td th:each="dia, diaStatus : ${diasSemana}">
+                    <label class="availability-cell">
+                      <input type="checkbox" name="horariosIndisponiveis"
+                         th:value="${turno + ':' + periodo + ':' + diaStatus.index}"
+                         th:checked="${professor.disponibilidadeHoraria[turno][periodo][diaStatus.index] == false}"
+                         th:aria-label="${'Marcar como indisponível: turno ' + (turno + 1) + ', período ' + (periodo + 1) + ', ' + dia}">
+                      <span>Indisponível</span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </fieldset>
 
-            <!-- Botões -->
-            <div class="form-actions">
-                <a class="btn-secondary" th:href="@{/professor}" href="/professor">Cancelar</a>
-                <button class="btn-primary" type="submit">Salvar Professor</button>
-            </div>
-
-        </form>
-        
-    </div>
-
+      <div class="form-actions">
+        <a class="btn-secondary" th:href="@{/professor/professor}">Cancelar</a>
+        <button class="btn-primary" type="submit">Salvar Professor</button>
+      </div>
+    </form>
+  </main>
+  <script th:src="@{/js/professor-form.js}" defer></script>
 </body>
 </html>

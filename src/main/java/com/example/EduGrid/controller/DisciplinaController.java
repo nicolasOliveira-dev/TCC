@@ -17,17 +17,16 @@ import com.example.EduGrid.service.DisciplinaService;
 @RequestMapping("/disciplina")
 public class DisciplinaController {
     private final DisciplinaService disciplinaService;
-    
+
     @GetMapping("/disciplina")
     public String abrirDisciplina(Model model) {
-        
+
         List<Disciplina> disciplinas = disciplinaService.listarDisciplinas();
 
         model.addAttribute("disciplinas", disciplinas);
 
         return "disciplina/disciplina";
     }
-    
 
     public DisciplinaController(DisciplinaService disciplinaService) {
         this.disciplinaService = disciplinaService;
@@ -59,14 +58,24 @@ public class DisciplinaController {
     }
 
     @GetMapping("/atualizar")
-    public String abrirFormularioAtualizacao() {
-        return "/disciplina/atualizarDisciplina";
+    public String abrirFormularioAtualizacao(@RequestParam(required = false) Integer id, Model model) {
+        if (id == null) {
+            return "redirect:/disciplina/disciplina";
+        }
+
+        Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
+        if (disciplina == null) {
+            return "redirect:/disciplina/disciplina";
+        }
+
+        model.addAttribute("disciplina", disciplina);
+        return "disciplina/atualizarDisciplina";
     }
 
     @PostMapping("/atualizar")
     public String atualizarDisciplina(@RequestParam Integer id, @ModelAttribute Disciplina disciplina) {
         disciplinaService.atualizarDisciplina(id, disciplina);
-        
+
         return "redirect:/disciplina/disciplina";
     }
 

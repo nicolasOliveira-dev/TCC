@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Otimizando Grade</title>
+  <meta name="description" content="Acompanhe a otimização da grade horária no EduGrid.">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">Edu Grid</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a th:href="@{/dashboard}" class="nav-item" id="menuDashboard"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a th:href="@{/professor/professor}" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a th:href="@{/turma/turma}" class="nav-item" id="menuTurmas"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a th:href="@{/disciplina/disciplina}" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a th:href="@{/curso/curso}" class="nav-item" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a th:href="@{/gradeHoraria/gerar}" class="nav-item active" id="menuGerarGrade" aria-current="page"><span class="icon">✨</span><span>Gerar Grade</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a th:href="@{/sair}" class="logout-btn">
+          <span>←</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1 class="page-title">Gerar Grade Horária</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="user-badge" th:title="${nomeUsuario}" th:text="${iniciaisUsuario}">EG</div>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <section>
+          <div class="page-main-header">
+            <div class="title-group">
+              <span class="title-icon" aria-hidden="true">✨</span>
+              <h2>Otimizando grade horária</h2>
+            </div>
+          </div>
+
+          <div class="panel-card" style="max-width: 760px; margin: 0 auto;">
+            <div class="optimization-status" role="status" aria-live="polite">
+              <p id="mensagem" class="optimization-message">
+                O EduGrid está organizando os horários.
+                Aguarde a conclusão do processamento.
+              </p>
+              <div class="optimization-progress" role="progressbar" aria-label="Progresso da geração da grade" aria-valuetext="Processamento em andamento">
+                <span class="optimization-progress-fill"></span>
+              </div>
+              <span class="optimization-hint">A geração pode levar alguns instantes.</span>
+            </div>
+            <a th:href="@{/gradeHoraria/configurar}" id="voltarConfiguracao" hidden>Voltar para configurar a grade</a>
+            <a th:href="@{/gradeHoraria/gerar}" id="voltarGrades" hidden>Ver grades já geradas</a>
+            <button type="button" id="tentarNovamente" class="btn-reconfig" hidden>Tentar consultar novamente</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <button class="help-fab" aria-label="Ajuda">?</button>
+
+  <script th:inline="javascript">
+    const jobId = /*[[${jobId}]]*/ "";
+    const statusUrl = /*[[@{/gradeHoraria/otimizacao/}]]*/ "/gradeHoraria/otimizacao/";
+    const gradeUrl = /*[[@{/gradeHoraria/grade/}]]*/ "/gradeHoraria/grade/";
+    const tempoInicioConsulta = Date.now();
+    let falhasDeConsulta = 0;
+    let avisoDemoraExibido = false;
+    let consultaEmAndamento = false;
+    let intervalo = null;
+
+    function pararBarraDeProgresso() {
+      document.querySelector(".optimization-progress").hidden = true;
+      document.querySelector(".optimization-hint").hidden = true;
+    }
+
+    function exibirOpcoesDeRetorno() {
+      document.getElementById("voltarConfiguracao").hidden = false;
+      document.getElementById("voltarGrades").hidden = false;
+    }
+
+    async function verificarStatus() {
+      if (consultaEmAndamento) return;
+      consultaEmAndamento = true;
+      try {
+        const resposta = await fetch(
+          `${statusUrl}${encodeURIComponent(jobId)}/status`,
+          { signal: AbortSignal.timeout(10000) }
+        );
+
+        if (!resposta.ok) {
+          throw new Error("Erro ao consultar otimização.");
+        }
+
+        const dados = await resposta.json();
+        falhasDeConsulta = 0;
+        const mensagem = document.getElementById("mensagem");
+
+        if (dados.status === "CONCLUIDO") {
+          if (dados.gradeId == null) {
+            mensagem.textContent = "A otimização terminou, mas não foi possível localizar a grade salva.";
+            pararBarraDeProgresso();
+            exibirOpcoesDeRetorno();
+            clearInterval(intervalo);
+            return;
+          }
+          window.location.href = `${gradeUrl}${encodeURIComponent(dados.gradeId)}`;
+        } else if (dados.status === "FALHOU") {
+          mensagem.textContent = dados.erro || "Nao foi possivel concluir a otimizacao.";
+          pararBarraDeProgresso();
+          exibirOpcoesDeRetorno();
+          clearInterval(intervalo);
+        } else if (dados.status === "NAO_ENCONTRADO") {
+          mensagem.textContent = "O processo de otimização não foi encontrado.";
+          pararBarraDeProgresso();
+          exibirOpcoesDeRetorno();
+          clearInterval(intervalo);
+        } else if (dados.status === "PROCESSANDO"
+            && Date.now() - tempoInicioConsulta >= 180000
+            && !avisoDemoraExibido) {
+          mensagem.textContent = "A geração ainda está sendo processada e está levando mais tempo que o esperado. A consulta continua ativa e a tela redirecionará quando terminar. Você também pode consultar as grades já geradas.";
+          pararBarraDeProgresso();
+          document.getElementById("voltarGrades").hidden = false;
+          avisoDemoraExibido = true;
+        }
+      } catch (erro) {
+        console.error(erro);
+        falhasDeConsulta++;
+        if (falhasDeConsulta >= 5) {
+          document.getElementById("mensagem").textContent = "Não foi possível consultar o andamento da geração após várias tentativas. A otimização pode continuar no servidor; tente consultar novamente ou abra as grades já geradas.";
+          pararBarraDeProgresso();
+          exibirOpcoesDeRetorno();
+          document.getElementById("tentarNovamente").hidden = false;
+          clearInterval(intervalo);
+        } else {
+          document.getElementById("mensagem").textContent = `Falha ao consultar o processo (${falhasDeConsulta}/5). Tentando novamente...`;
+        }
+      } finally {
+        consultaEmAndamento = false;
+      }
+    }
+
+    document.getElementById("tentarNovamente").addEventListener("click", () => {
+      falhasDeConsulta = 0;
+      document.getElementById("tentarNovamente").hidden = true;
+      document.querySelector(".optimization-progress").hidden = false;
+      document.querySelector(".optimization-hint").hidden = false;
+      document.getElementById("mensagem").textContent = "Consultando o andamento da geração...";
+      verificarStatus();
+      intervalo = setInterval(verificarStatus, 2000);
+    });
+
+    intervalo = setInterval(verificarStatus, 2000);
+    verificarStatus();
+  </script>
+  <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

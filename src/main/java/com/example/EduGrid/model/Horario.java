@@ -1,9 +1,10 @@
 package com.example.EduGrid.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Horario {
@@ -13,13 +14,18 @@ public class Horario {
     private int turno;
     private int periodoDia;
     private int diaSemana;
+    private boolean manualmenteEditado;
+    @ManyToOne
+    private Turma turma;
+    @ManyToOne
+    private Disciplina disciplina;
+    @ManyToOne(optional = true)
+    private Professor professor;
 
-    private String turma;
-    private String disciplina;
-    private String professor;
-   
+    @ManyToOne
+    private GradeHoraria gradeHoraria;
 
-    public Horario(Integer id, int turno, int periodoDia, int diaSemana, String turma, String disciplina, String professor) {
+    public Horario(Integer id, int turno, int periodoDia, int diaSemana, Turma turma, Disciplina disciplina, Professor professor) {
         this.id = id;
         this.turno = turno;
         this.periodoDia = periodoDia;
@@ -29,7 +35,7 @@ public class Horario {
         this.professor = professor;
     }
     public Horario() {
-       
+
     }
 
     public Integer getId() {
@@ -64,27 +70,43 @@ public class Horario {
         this.diaSemana = diaSemana;
     }
 
-    public String getTurma() {
+    public boolean isManualmenteEditado() {
+        return manualmenteEditado;
+    }
+
+    public void setManualmenteEditado(boolean manualmenteEditado) {
+        this.manualmenteEditado = manualmenteEditado;
+    }
+
+    public Turma getTurma() {
         return turma;
     }
 
-    public void setTurma(String turma) {
+    public void setTurma(Turma turma) {
         this.turma = turma;
     }
 
-    public String getDisciplina() {
+    public Disciplina getDisciplina() {
         return disciplina;
     }
 
-    public void setDisciplina(String disciplina) {
+    public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
     }
 
-    public String getProfessor() {
+    public Professor getProfessor() {
         return professor;
     }
 
-    public void setProfessor(String professor) {
+    public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    public GradeHoraria getGradeHoraria() {
+        return gradeHoraria;
+    }
+
+    public void setGradeHoraria(GradeHoraria gradeHoraria) {
+        this.gradeHoraria = gradeHoraria;
     }
 }

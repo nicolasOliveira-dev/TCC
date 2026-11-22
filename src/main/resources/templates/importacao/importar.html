@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR"
+   xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Importação de Dados</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body class="standalone-form-body">
+
+<main class="form-card-container importacao-card">
+
+  <header class="form-card-header">
+    <div class="brand-badge">EduGrid</div>
+
+    <h1>Importar dados</h1>
+
+    <p>
+      Cadastre cursos, disciplinas, turmas e professores
+      utilizando uma planilha Excel.
+    </p>
+  </header>
+
+  <section class="importacao-instrucoes">
+    <h2>Como funciona?</h2>
+
+    <div class="importacao-etapas">
+      <div class="importacao-etapa">
+        <span class="etapa-numero">1</span>
+        <span>Baixe o modelo de planilha.</span>
+      </div>
+
+      <div class="importacao-etapa">
+        <span class="etapa-numero">2</span>
+        <span>Preencha as informações solicitadas.</span>
+      </div>
+
+      <div class="importacao-etapa">
+        <span class="etapa-numero">3</span>
+        <span>Selecione o arquivo e importe os dados.</span>
+      </div>
+    </div>
+  </section>
+
+  <form th:action="@{/importacao}"
+     method="post"
+     enctype="multipart/form-data"
+     class="edugrid-form importacao-form"
+     id="formImportacao">
+
+    <div class="form-group">
+      <label for="arquivo">Selecione a planilha</label>
+
+      <label for="arquivo" class="importacao-upload">
+        <span class="upload-icon">↑</span>
+        <strong id="arquivoTitulo">
+          Clique para selecionar um arquivo
+        </strong>
+        <span id="arquivoDescricao">
+          Formato permitido: .xlsx
+        </span>
+      </label>
+
+      <input type="file"
+         id="arquivo"
+         name="arquivo"
+         accept=".xlsx"
+         required
+         class="importacao-file-input">
+
+      <p class="form-help-text">
+        Utilize o modelo disponibilizado pelo EduGrid
+        para evitar erros na importação.
+      </p>
+    </div>
+
+    <button type="submit"
+        class="btn-primary importacao-submit"
+        id="btnImportar">
+      Importar planilha
+    </button>
+  </form>
+
+  <div class="importacao-separador">
+    <span>ou</span>
+  </div>
+
+  <a th:href="@{/planilhas/Modelo_Importacao_EduGrid.xlsx}"
+   download="Modelo_Importacao_EduGrid.xlsx"
+   class="btn-secondary importacao-download">
+    <span aria-hidden="true">↓</span>
+    Baixar modelo de planilha
+  </a>
+
+  <div th:if="${erro != null}"
+    class="importacao-alerta importacao-erro"
+    role="alert">
+
+    <strong>Não foi possível importar a planilha.</strong>
+    <p th:text="${erro}"></p>
+  </div>
+
+  <section th:if="${resultado != null}"
+      class="importacao-alerta importacao-sucesso"
+      role="status">
+
+    <h2>✓ Importação concluída!</h2>
+    <p>Os dados foram cadastrados com sucesso.</p>
+
+    <div class="importacao-resultados">
+
+      <div class="importacao-resultado">
+        <strong th:text="${resultado.cursos}">0</strong>
+        <span>Cursos</span>
+      </div>
+
+      <div class="importacao-resultado">
+        <strong th:text="${resultado.disciplinas}">0</strong>
+        <span>Disciplinas</span>
+      </div>
+
+      <div class="importacao-resultado">
+        <strong th:text="${resultado.turmas}">0</strong>
+        <span>Turmas</span>
+      </div>
+
+      <div class="importacao-resultado">
+        <strong th:text="${resultado.professores}">0</strong>
+        <span>Professores</span>
+      </div>
+    </div>
+
+    <p class="importacao-observacao">
+      Os professores importados ainda precisam ter suas
+      disponibilidades configuradas antes da geração
+      da grade horária.
+    </p>
+  </section>
+
+</main>
+
+<script>
+  const inputArquivo = document.getElementById("arquivo");
+  const tituloArquivo = document.getElementById("arquivoTitulo");
+  const descricaoArquivo = document.getElementById("arquivoDescricao");
+  const botaoImportar = document.getElementById("btnImportar");
+  const formulario = document.getElementById("formImportacao");
+
+  inputArquivo.addEventListener("change", function () {
+    const arquivo = this.files[0];
+
+    if (arquivo) {
+      tituloArquivo.textContent = arquivo.name;
+
+      descricaoArquivo.textContent =
+        "Arquivo selecionado • " +
+        (arquivo.size / 1024).toFixed(1) + " KB";
+    } else {
+      tituloArquivo.textContent =
+        "Clique para selecionar um arquivo";
+
+      descricaoArquivo.textContent =
+        "Formato permitido: .xlsx";
+    }
+  });
+
+  formulario.addEventListener("submit", function () {
+    if (formulario.checkValidity()) {
+      botaoImportar.disabled = true;
+      botaoImportar.textContent = "Importando...";
+    }
+  });
+</script>
+
+</body>
+</html>

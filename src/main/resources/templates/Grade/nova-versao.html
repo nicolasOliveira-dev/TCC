@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Nova versão da grade</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+
+    <div class="main-wrapper">
+      <header class="topbar"><div class="topbar-left"><h1 class="page-title">Nova tentativa de otimização</h1></div></header>
+      <main class="content-body">
+        <section class="panel-card nova-versao-card">
+          <h2>Comparação com a grade atual</h2>
+          <p id="estadoTentativa" role="status" aria-live="polite">Preparando a nova tentativa…</p>
+          <dl id="comparacaoScores" hidden>
+            <dt>Pontuação atual</dt><dd id="scoreAtual">—</dd>
+            <dt>Pontuação candidata</dt><dd id="scoreCandidato">—</dd>
+            <dt>Semente da execução</dt><dd id="sementeExecucao">—</dd>
+          </dl>
+          <div id="diagnosticoCandidato" class="edit-preview" style="white-space: pre-line"></div>
+          <section id="secaoMudancas" hidden>
+            <h3>Blocos que mudariam</h3>
+            <div class="schedule-table-wrapper">
+              <table class="schedule-table">
+                <thead><tr><th>Turma / disciplina</th><th>Professor</th><th>Horário atual</th><th>Horário candidato</th></tr></thead>
+                <tbody id="listaMudancas"></tbody>
+              </table>
+            </div>
+          </section>
+          <p class="error-message" th:if="${erroAplicacao}" th:text="${erroAplicacao}"></p>
+          <div class="schedule-header-actions">
+            <form th:action="@{/gradeHoraria/nova-versao/{id}/aplicar(id=${tentativaId})}" method="post">
+              <button id="aplicarCandidata" class="btn-primary" type="submit" hidden>Aplicar nova versão</button>
+            </form>
+            <form th:action="@{/gradeHoraria/nova-versao/{id}/manter(id=${tentativaId})}" method="post">
+              <button id="manterAtual" class="btn-reconfig" type="submit" hidden>Manter grade atual</button>
+            </form>
+            <a id="voltarOrigem" class="btn-reconfig" th:href="@{/gradeHoraria/gerar}" hidden>Voltar às grades</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script th:inline="javascript">
+    const tentativaId = /*[[${tentativaId}]]*/ "";
+    const statusUrl = /*[[@{/gradeHoraria/nova-versao/}]]*/ "/gradeHoraria/nova-versao/";
+    const gradeUrl = /*[[@{/gradeHoraria/grade/}]]*/ "/gradeHoraria/grade/";
+    async function atualizarTentativa() {
+      try {
+        const response = await fetch(`${statusUrl}${encodeURIComponent(tentativaId)}/status`);
+        const data = await response.json();
+        const estado = document.getElementById("estadoTentativa");
+        const result = data.resultado;
+        if (data.status === "PROCESSANDO") {
+          estado.textContent = result?.diagnostico || "O Timefold está buscando uma distribuição melhor. A grade atual continua preservada.";
+          return;
+        }
+        clearInterval(intervaloTentativa);
+        if (data.status !== "CONCLUIDO" || !result) {
+          estado.textContent = result?.erro || "Não foi possível concluir a tentativa.";
+          document.getElementById("voltarOrigem").hidden = false;
+          return;
+        }
+        document.getElementById("comparacaoScores").hidden = false;
+        document.getElementById("scoreAtual").textContent = result.pontuacaoAtual ?? "Indisponível";
+        document.getElementById("scoreCandidato").textContent = result.pontuacaoCandidata ?? "Indisponível";
+        document.getElementById("sementeExecucao").textContent = result.semente ?? "—";
+        document.getElementById("diagnosticoCandidato").textContent = result.diagnostico || "";
+        const listaMudancas = document.getElementById("listaMudancas");
+        listaMudancas.replaceChildren();
+        (result.mudancas || []).forEach(mudanca => {
+          const linha = document.createElement("tr");
+          [ `${mudanca.turma} / ${mudanca.disciplina} (${mudanca.duracaoPeriodos} períodos)`, mudanca.professor,
+            mudanca.horarioAnterior, mudanca.horarioCandidato ].forEach(valor => {
+              const celula = document.createElement("td"); celula.textContent = valor; linha.appendChild(celula);
+            });
+          listaMudancas.appendChild(linha);
+        });
+        document.getElementById("secaoMudancas").hidden = !(result.mudancas || []).length;
+        if (result.podeAplicar) {
+          estado.textContent = "A candidata é válida e melhor que a grade atual. Você pode aplicá-la ou manter a versão atual.";
+          document.getElementById("aplicarCandidata").hidden = false;
+        } else if (!result.viavel) {
+          estado.textContent = "A busca terminou sem uma candidata válida. A grade atual não foi alterada.";
+        } else {
+          estado.textContent = "A candidata não supera a pontuação atual. A grade atual não foi alterada.";
+        }
+        document.getElementById("manterAtual").hidden = false;
+        document.getElementById("voltarOrigem").href = `${gradeUrl}${encodeURIComponent(result.gradeOrigemId)}`;
+        document.getElementById("voltarOrigem").hidden = false;
+      } catch (error) {
+        document.getElementById("estadoTentativa").textContent = "Erro ao consultar a tentativa. A grade atual permanece preservada.";
+      }
+    }
+    const intervaloTentativa = setInterval(atualizarTentativa, 2000);
+    atualizarTentativa();
+  </script>
+  <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

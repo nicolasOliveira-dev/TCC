@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Grades geradas</title>
+  <meta name="description" content="Consulte grades horárias já geradas ou inicie uma nova geração.">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">Edu Grid</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a th:href="@{/dashboard}" class="nav-item" id="menuDashboard"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a th:href="@{/professor/professor}" class="nav-item" id="menuProfessores"><span class="icon">🧑‍🏫</span><span>Professores</span></a>
+        <a th:href="@{/turma/turma}" class="nav-item" id="menuTurmas"><span class="icon">🎒</span><span>Turmas</span></a>
+        <a th:href="@{/disciplina/disciplina}" class="nav-item" id="menuDisciplinas"><span class="icon">📚</span><span>Disciplinas</span></a>
+        <a th:href="@{/curso/curso}" class="nav-item" id="menuCursos"><span class="icon">🎓</span><span>Cursos</span></a>
+        <a th:href="@{/gradeHoraria/gerar}" class="nav-item active" id="menuGerarGrade" aria-current="page"><span class="icon">✨</span><span>Gerar Grade</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <a th:href="@{/sair}" class="logout-btn"><span>←</span><span>Sair</span></a>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-menu-btn" id="toggleMenuBtn" aria-label="Abrir ou fechar menu">
+            <span></span><span></span><span></span>
+          </button>
+          <h1 class="page-title">Gerar Grade Horária</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="user-badge" th:title="${nomeUsuario}" th:text="${iniciaisUsuario}">EG</div>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <section>
+          <div class="page-main-header">
+            <div class="title-group">
+              <span class="title-icon" aria-hidden="true">🗓️</span>
+              <h2>Grades geradas</h2>
+            </div>
+            <a th:href="@{/gradeHoraria/configurar}" class="btn-generate-grid history-new-button">
+              Gerar nova grade
+            </a>
+          </div>
+
+          <div class="panel-card generated-grades" th:if="${not #lists.isEmpty(gradesGeradas)}">
+            <details class="generated-grade" th:each="gradeGerada : ${gradesGeradas}">
+              <summary>
+                <span th:text="|Grade ${gradeGerada.id}|">Grade 1</span>
+                <time th:if="${gradeGerada.dataGeracao != null}"
+                      th:text="${gradeGerada.dataGeracaoFormatada}">
+                  Data da geração
+                </time>
+                
+              </summary>
+              <div class="generated-grade-details">
+                <p th:if="${gradeGerada.tamanhoGrade != null}"
+                   th:text="|${gradeGerada.tamanhoGrade.qtdeDiasSemana} dias por semana · ${gradeGerada.tamanhoGrade.qtdePeriodosDia} períodos por dia · ${gradeGerada.tamanhoGrade.qtdeTurnos} turnos|">
+                  Configuração da grade
+                </p>
+                <p th:unless="${gradeGerada.tamanhoGrade != null}">
+                  Configuração da grade indisponível.
+                </p>
+                <a th:href="@{/gradeHoraria/grade/{id}(id=${gradeGerada.id})}" class="btn-reconfig">
+                  Visualizar esta grade
+                </a>
+              </div>
+            </details>
+          </div>
+
+          <div class="panel-card history-empty" th:if="${#lists.isEmpty(gradesGeradas)}">
+            <p>Nenhuma grade foi gerada ainda.</p>
+            <p>Selecione “Gerar nova grade” para configurar e criar a primeira.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <button class="help-fab" aria-label="Ajuda">?</button>
+  <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

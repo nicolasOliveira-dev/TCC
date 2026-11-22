@@ -2,6 +2,7 @@ package com.example.EduGrid.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,7 +10,11 @@ import com.example.EduGrid.model.Turma;
 
 public interface TurmaRepository
         extends JpaRepository<Turma, Integer> {
-   
+
+    @EntityGraph(attributePaths = {"curso", "disciplinas", "disciplinas.curso"})
+    @Query("SELECT DISTINCT t FROM Turma t")
+    List<Turma> findAllParaOtimizacao();
+
     @Query("""
             SELECT t.curso, COUNT(t)
             FROM Turma t

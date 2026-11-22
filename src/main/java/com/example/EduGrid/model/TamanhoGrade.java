@@ -57,7 +57,7 @@ public class TamanhoGrade {
     public void setQtdeDiasSemana(int qtdeDiasSemana) {
         this.qtdeDiasSemana = qtdeDiasSemana;
     }
-    
+
     public int getTamanhoPeriodo() {
         return tamanhoPeriodo;
     }

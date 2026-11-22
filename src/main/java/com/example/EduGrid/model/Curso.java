@@ -13,7 +13,7 @@ public class Curso {
     private String nomeCurso;
     private String tipoCurso;
     private String turno;
-    
+
     public Curso(String nomeCurso, String tipoCurso, String turno) {
         this.nomeCurso = nomeCurso;
         this.tipoCurso = tipoCurso;

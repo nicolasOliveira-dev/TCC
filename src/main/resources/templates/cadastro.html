@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGrid - Criar conta</title>
+  <meta name="description" content="Crie uma conta para acessar o EduGrid.">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+  <main class="auth-page-container">
+    <div class="auth-card">
+      <div class="auth-logo-badge">Edu Grid</div>
+      <h1>Criar conta</h1>
+      <p class="subtitle">Cadastre seus dados para acessar o EduGrid.</p>
+
+      <p class="auth-feedback auth-feedback-error" role="alert"
+         th:if="${erroCadastro}" th:text="${erroCadastro}"></p>
+
+      <form class="auth-form" th:action="@{/cadastro}" method="post">
+        <div class="form-group">
+          <label for="nomeCompleto">Nome completo</label>
+          <input type="text" id="nomeCompleto" name="nomeCompleto" class="form-input"
+                 placeholder="Nome e sobrenome" autocomplete="name" maxlength="120" required>
+        </div>
+        <div class="form-group">
+          <label for="emailInput">E-mail</label>
+          <input type="email" id="emailInput" name="email" class="form-input"
+                 placeholder="seuemail@escola.edu" autocomplete="email" maxlength="180" required>
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Senha</label>
+          <input type="password" id="passwordInput" name="senha" class="form-input"
+                 placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmarSenha">Confirmar senha</label>
+          <input type="password" id="confirmarSenha" name="confirmarSenha" class="form-input"
+                 placeholder="Digite a senha novamente" autocomplete="new-password" minlength="8" required>
+        </div>
+        <button type="submit" class="auth-submit-btn">Criar conta</button>
+      </form>
+      <div class="auth-footer">Já tem uma conta? <a th:href="@{/}">Entrar</a></div>
+    </div>
+  </main>
+</body>
+</html>
